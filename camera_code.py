@@ -11,7 +11,7 @@ cap_width = 3 # cm
 camera_focal_length = 900 # pixels 1430 for the camera we have        1050 is for my laptop
 
 def mask_color(frame):
-	img_conv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+	img_converted = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 	# HLS
 	# white = [[50, 50, 180], [170, 180, 255]]
 	# HSV
@@ -20,15 +20,15 @@ def mask_color(frame):
 	lower = np.array(white[0])
 	upper = np.array(white[1])
 		
-	mask = cv2.inRange(img_conv, lower, upper)
-	output = cv2.bitwise_and(img_conv, img_conv, mask = mask)
-	output = cv2.GaussianBlur(output, (5,5),0)
+	mask = cv2.inRange(img_converted, lower, upper)
+	img_masked = cv2.bitwise_and(img_converted, img_converted, mask = mask)
+	img_masked = cv2.GaussianBlur(img_masked, (5,5),0)
 
-	return output, mask, img_conv
+	return img_masked, mask, img_converted
 
 
 
-def detect_contour(image, frame):
+def detect_ellipse(image, frame):
 	#--- First obtain the threshold using the greyscale image ---
 
 	
@@ -56,17 +56,17 @@ def detect_contour(image, frame):
 				text_dist = int(np.sqrt(minor**2 + major**2))
 				x = int(ellipse[0][0])
 				y = int(ellipse[0][1])
-				# print(x)
-				# print(axes)
 			except: pass
 	try:
 		cap_distance = camera_focal_length*cap_width/major
 		cv2.putText(image, "{:.1f}".format(cap_distance) , (x+text_dist/3,y+text_dist/3), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
+		# Draw the fitted ellipse
 		output = cv2.ellipse(image,ellipse,(0,255,0),2)
 		
 	except:
 		output = image
 
+	# Draw the biggest contour if an ellipse is not successfully fitted
 	# output = cv2.drawContours(image, big_contour, -1, (255,0,0), 3)
 	return output
 
@@ -75,39 +75,26 @@ def detect_contour(image, frame):
 counter = 0
 number_to_avg = 50
 radius_list = np.zeros(number_to_avg)
-#capture from camera at location 0
-cap = cv2.VideoCapture(0)
-#set the width and height, and UNSUCCESSFULLY set the exposure time
-cap.set(3,1280) # Width
-cap.set(4,1024) # Height
-# cap.set(5, 25) # Frame rate
-cap.set(15, -5) # Exposure time 2^(-5)
+cam = cv2.VideoCapture(0)
+cam.set(3,1280) # Width
+cam.set(4,1024) # Height
+# cam.set(5, 25) # Frame rate
+cam.set(15, -5) # Exposure time 2^(-5)
 
 
 
 while True:
-	ret, img = cap.read()
-	# img = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
-	# img_conv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
-	# cv2.circle(img_conv, (640, 360), 10, (0, 255, 0), 4)
-	# # print(np.shape(img_conv))
-	# print(img_conv[640, 360,:])
-	output, mask, img_conv = mask_color(img)
-	print(img_conv[240,360,:])
-	cv2.circle(img_conv, (360, 240), 10, (0, 255, 0), 4)
+	ret, img = cam.read()
+	img_masked, mask, img_converted = mask_color(img)
+	img_fit_ellipse = detect_ellipse(img, img_masked)
 
-	output_circle = detect_contour(img, output)
-	
+	# For Testing
+
+	# print(img_converted[240,360,:])
+	# cv2.circle(img_converted, (360, 240), 10, (0, 255, 0), 4)
 
 	
-	
-	# counter += 1
-	
-
-	# if counter >= number_to_avg:
-	# 	print(np.median(radius_list))
-	# 	counter = 0
-	cv2.imshow("input", output_circle)
+	cv2.imshow("input", img_fit_ellipse)
 
 	key = cv2.waitKey(1) & 0xFF
 	if key == ord("q"):
