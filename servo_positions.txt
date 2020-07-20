@@ -1,0 +1,37 @@
+base spine
+
+Minimum Position = 3968
+Maximum Position = 8000
+
+
+base arm
+
+Minimum Position = 3000
+Maximum Position = 9984
+
+middle: 6300
+Z axis: 8300
+90 degrees: 4300
+
+
+Servo elbow
+
+1 step is 0.0025 deg = 0.0003926990816987241 rad
+z axis = 8300 steps
+90 deg = 4300 steps
+beginning = 2000 stepsmiddle = 5250 steps
+end = 8500 steps
+
+
+Servo Wrist
+
+min = 2000
+middle = 5250
+max = 8500
+
+
+
+Servo Grappler
+
+Minimum Position = 1000
+Maximum Position = 6000
