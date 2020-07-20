@@ -15,8 +15,8 @@ and the standard python package libraries.
 
 ## File Index
 
-**maestro.py** : The necessary functions to work with servos
-**camera_code.py** : Script for image recognition i.e. to identiy bottle caps
-**set_destination.py** : Script to calculate servo steps based on inverse kinematics
-**tryout.py** : Script for testing
-**servo_positions.txt** : Contains info for the servo characteristics
+* **maestro.py** : The necessary functions to work with servos
+* **camera_code.py** : Script for image recognition i.e. to identiy bottle caps
+* **set_destination.py** : Script to calculate servo steps based on inverse kinematics
+* **tryout.py** : Script for testing
+* **servo_positions.txt** : Contains info for the servo characteristics
