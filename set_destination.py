@@ -56,13 +56,13 @@ def set_speed_acceleration(agent, motor_number, speed=15, accel=5):
 def get_steps_from_position(agent, servo_number):
 	rad_per_step = rad_per_step_list[servo_number]
 	if servo_number==0:
-		steps = int(5984 + agent.angles[servo_number]/rad_per_step)
+		steps = int(5100 + agent.angles[servo_number]/rad_per_step)
 	if servo_number==1:
-		steps = int(6492 + agent.angles[servo_number]/rad_per_step)
+		steps = int(6000 + agent.angles[servo_number]/rad_per_step)
 	if servo_number==2:
 		steps = int(6000 + (agent.angles[servo_number])/rad_per_step)
 	if servo_number==3:
-		steps = int(5250 + agent.angles[servo_number]/rad_per_step)
+		steps = int(6000 + agent.angles[servo_number]/rad_per_step)
 
 	if steps > min_max_servo_steps_list[servo_number][1]:
 		print("exceeded max steps in servo 0\ngoal was %i steps"%steps)
@@ -77,7 +77,8 @@ def get_steps_from_position(agent, servo_number):
 
 
 def set_destination(coordinates):
-	destination = [[-coordinates[0][0] + 1.66371003, -coordinates[0][1], -coordinates[0][2] + 2.18830734]]
+	destination = [[coordinates[0][0] + 1.66371003, coordinates[0][1], coordinates[0][2] + 2.18830734]]
+	# 0 + 1.81472887, 0, 0 + 0.52638276
 	print("Destination coordinates:", destination)
 	return destination
 
@@ -127,7 +128,9 @@ def main(agent, model, destination_coordinates, speed=15):
 
 	except: pass
 
-destination_coordinates = [[0, 0, 0]]
+destination_coordinates = [[0,0,0]]
 main(servo, arm, destination_coordinates)
+arm.ee = set_destination([[-destination_coordinates[0][0] - 1.66371003 + 1.81472887, destination_coordinates[0][1], -destination_coordinates[0][2] - 2.18830734 + 0.52638276]])
+tinyik.visualize(arm)
 
-# parked_position(servo)
+parked_position(servo)

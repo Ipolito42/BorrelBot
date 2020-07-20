@@ -29,7 +29,7 @@ z_2 = 28*np.sin(np.arctan(theta))
 arm = tinyik.Actuator(['z', [0.14, 0., 0.36], 'y', [x_0/100, 0, z_0/100], 'y', [x_1/100, 0, z_1/100], 'x', [x_2/100, 0, z_2/100]])
 # arm = tinyik.Actuator(['z', [0.15, 0., 0.4], 'y', [0.421, 0, 1.124], 'y', [0.337, 0, 0.834], 'x', [0.105, 0, 0.2596], 'y', [0.405, 0, 1.012]])
 # arm.angles = [[0, 0, 0]]
-destination_coordinates = [ 0 + 1.81472887, 0,  1 + 0.52638276]
+destination_coordinates = [ 0 + 1.81472887, 0, 0 + 0.52638276]
 arm.ee = destination_coordinates
 
 # servo.setSpeed(2, 30)
