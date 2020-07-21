@@ -42,57 +42,102 @@ servo wrist
 	end = 8500 steps
 
 '''
+
 global rad_per_step_list
 global min_max_servo_steps_list
-rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561]
-min_max_servo_steps_list = [[3968, 8000], [3000, 9984], [4000, 8000], [2000, 8500]]
 
+class set_destination():
+	def __init__(self, model, destination_coordinates, agent=None):
 
-def set_speed_acceleration(agent, motor_number, speed=15, accel=5):
-	agent.setAccel(motor_number, accel)
-	agent.setSpeed(motor_number, speed)
+		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561]
+		min_max_servo_steps_list = [[3968, 8000], [3000, 9984], [4000, 8000], [2000, 8500]]
 
-
-def get_steps_from_position(agent, servo_number):
-	rad_per_step = rad_per_step_list[servo_number]
-	if servo_number==0:
-		steps = int(5100 + agent.angles[servo_number]/rad_per_step)
-	if servo_number==1:
-		steps = int(6000 + agent.angles[servo_number]/rad_per_step)
-	if servo_number==2:
-		steps = int(6000 + (agent.angles[servo_number])/rad_per_step)
-	if servo_number==3:
-		steps = int(6000 + agent.angles[servo_number]/rad_per_step)
-
-	if steps > min_max_servo_steps_list[servo_number][1]:
-		print("exceeded max steps in servo 0\ngoal was %i steps"%steps)
-		steps = min_max_servo_steps_list[servo_number][1]
+		self.destination_coordinates = [destination_coordinates]
+		self.model = model
+		self.agent = agent
 		
-	elif steps < min_max_servo_steps_list[servo_number][0]:
-		print("exceeded min steps in servo 0\ngoal was %i steps"%steps)
-		steps = min_max_servo_steps_list[servo_number][0]
 
-	print("Servo %i location in steps: %i" %(servo_number, steps))
-	return steps
+		
+
+		
 
 
-def set_destination(coordinates):
-	destination = [[coordinates[0][0] + 1.66371003, coordinates[0][1], coordinates[0][2] + 2.18830734]]
-	# 0 + 1.81472887, 0, 0 + 0.52638276
-	print("Destination coordinates:", destination)
-	return destination
+
+	def set_speed_acceleration(self, servo_number, speed=15, accel=5):
+		self.agent.setAccel(servo_number, accel)
+		self.agent.setSpeed(servo_number, speed)
 
 
-def parked_position(agent):
-	agent.setTarget(0, min_max_servo_steps_list[0][1])
-	agent.setTarget(1, min_max_servo_steps_list[1][1])
-	agent.setTarget(2, min_max_servo_steps_list[2][1])
-	agent.setTarget(3, min_max_servo_steps_list[3][1])
+	def get_steps_from_position(self, servo_number):
+		rad_per_step = rad_per_step_list[servo_number]
+		if servo_number==0:
+			steps = int(5100 + self.model.angles[servo_number]/rad_per_step)
+		if servo_number==1:
+			steps = int(6000 + self.model.angles[servo_number]/rad_per_step)
+		if servo_number==2:
+			steps = int(6000 + (self.model.angles[servo_number])/rad_per_step)
+		if servo_number==3:
+			steps = int(6000 + self.model.angles[servo_number]/rad_per_step)
+
+		if steps > min_max_servo_steps_list[servo_number][1]:
+			print("exceeded max steps in servo 0\ngoal was %i steps"%steps)
+			steps = min_max_servo_steps_list[servo_number][1]
+			
+		elif steps < min_max_servo_steps_list[servo_number][0]:
+			print("exceeded min steps in servo 0\ngoal was %i steps"%steps)
+			steps = min_max_servo_steps_list[servo_number][0]
+
+		print("Servo %i location in steps: %i" %(servo_number, steps))
+		return steps
+
+
+	def set_destination_coordinates(self,):
+		self.destination = [[self.destination_coordinates[0][0] + 1.66371003, self.destination_coordinates[0][1], self.destination_coordinates[0][2] + 2.18830734]]
+		self.destination_model = [[self.destination_coordinates[0][0] + 1.81472887, self.destination_coordinates[0][1], self.destination_coordinates[0][2] + 0.52638276]]
+		# 0 + 1.81472887, 0, 0 + 0.52638276
+		print("Destination coordinates:", self.destination)
+
+	
+
+
+	def set_to_parked_position(self,):
+		self.agent.setTarget(0, min_max_servo_steps_list[0][1])
+		self.agent.setTarget(1, min_max_servo_steps_list[1][1])
+		self.agent.setTarget(2, min_max_servo_steps_list[2][1])
+		self.agent.setTarget(3, min_max_servo_steps_list[3][1])
+
+
+
+
+	def main(self, speed=15):
+		self.set_destination_coordinates()
+		print(self.destination)
+		self.model.ee = self.destination_model
+		tinyik.visualize(self.model)
+
+			
+		if self.agent!=None:
+			# Set speed and acceleration of the servos
+			self.set_speed_acceleration(self.agent, 0, speed)
+			self.set_speed_acceleration(self.agent, 1, speed)
+			self.set_speed_acceleration(self.agent, 2, speed)
+			self.set_speed_acceleration(self.agent, 3, speed)
+
+			self.agent.setTarget(0, self.get_steps_from_position(arm, 0)) # Base
+			self.agent.setTarget(1, self.get_steps_from_position(arm, 1)) # Base Arm
+			self.agent.setTarget(2, self.get_steps_from_position(arm, 2)) # Elbow Arm
+			self.agent.setTarget(3, self.get_steps_from_position(arm, 3)) # Wrist
+
+		
+	
+
+
+
+
 
 
 
 # Calculate analytic model parameters
-
 theta = np.arctan(36/14)
 x_0 = 120*np.cos(np.arctan(theta))
 z_0 = 120*np.sin(np.arctan(theta))
@@ -104,33 +149,14 @@ x_2 = 28*np.cos(np.arctan(theta))
 z_2 = 28*np.sin(np.arctan(theta))
 
 
+try: 
+	servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
+except: servo_agent=None
 
-servo = maestro.Controller('COM8') # Setup connection with the correct USB port
+arm_model = tinyik.Actuator(['z', [0.14, 0., 0.36], 'y', [x_0/100, 0, z_0/100], 'y', [x_1/100, 0, z_1/100], 'x', [x_2/100, 0, z_2/100]]) # Create the initial full model of the arm_model
 
-arm = tinyik.Actuator(['z', [0.14, 0., 0.36], 'y', [x_0/100, 0, z_0/100], 'y', [x_1/100, 0, z_1/100], 'x', [x_2/100, 0, z_2/100]]) # Create the initial full model of the arm
-
-# Set speed and acceleration of the servos
+destination_coordinates = [float((input("Give x: "))),float((input("Give y: "))),float((input("Give z: ")))]
 
 
-def main(agent, model, destination_coordinates, speed=15):
-	try:
-		model.ee = set_destination(destination_coordinates)
-
-		set_speed_acceleration(agent, 0, speed)
-		set_speed_acceleration(agent, 1, speed)
-		set_speed_acceleration(agent, 2, speed)
-		set_speed_acceleration(agent, 3, speed)
-
-		agent.setTarget(0, get_steps_from_position(arm, 0)) # Base
-		agent.setTarget(1, get_steps_from_position(arm, 1)) # Base Arm
-		agent.setTarget(2, get_steps_from_position(arm, 2)) # Elbow Arm
-		agent.setTarget(3, get_steps_from_position(arm, 3)) # Wrist
-
-	except: pass
-
-destination_coordinates = [[0,0,0]]
-main(servo, arm, destination_coordinates)
-arm.ee = set_destination([[-destination_coordinates[0][0] - 1.66371003 + 1.81472887, destination_coordinates[0][1], -destination_coordinates[0][2] - 2.18830734 + 0.52638276]])
-tinyik.visualize(arm)
-
-parked_position(servo)
+if __name__ == "__main__":
+	set_destination(arm_model, destination_coordinates, servo_agent).main()
