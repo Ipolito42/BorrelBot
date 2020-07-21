@@ -70,7 +70,7 @@ class set_destination():
 	def set_speed_acceleration(self, servo_number):
 		'''
 			Args:
-				Servo number on the board
+				servo_number: Servo number on the board
 			Sets the speed and acceleration of the servos
 		'''
 		
@@ -85,7 +85,7 @@ class set_destination():
 									servo_3_middle=6000):
 		'''
 			Args:
-				Servo number on the board
+				servo_number: Servo number on the board
 			Returns the steps required for the servos to rotate to the appropriate angle calculated from the IK model
 		'''
 		rad_per_step = rad_per_step_list[servo_number]
@@ -135,15 +135,19 @@ class set_destination():
 
 
 
-	def main(self, destination_coordinates):
+	def main(self, destination_coordinates, vizualization=True):
 		'''
-		Args:
-			Sets the speed and acceleration of the servos
+			Args:
+				destination_coordinates: a list [x,y,z] of the destination coordinates
+			Kwargs:
+				vizualization: pops a 3d vizualization window with a rotatable model of the arm
+			Moves the motors to the destination coordinates and if requested pops a vizualization window of the model
 		'''
 		self.destination_coordinates = [destination_coordinates]
 		self.set_destination_coordinates()
 		self.model.ee = self.destination_model
-		tinyik.visualize(self.model)
+		if vizualization:
+			tinyik.visualize(self.model)
 
 			
 		if self.agent!=None:
