@@ -50,5 +50,6 @@ motors = set_destination(arm_model, servo_agent)
 
 # Will loop over main with coordinates given by the camera in the loop
 # need to turn the vizualization parameter to false to run in the loop
-motors.main(destination_coordinates)
+# motors.main(destination_coordinates, vizualization=True)
 
+motors.set_to_parked_position()

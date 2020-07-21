@@ -6,7 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-global cap_width, camera_focal_length
+global cap_width
+global camera_focal_length
 cap_width = 3 # cm
 camera_focal_length = 900 # pixels 1430 for the camera we have        1050 is for my laptop
 

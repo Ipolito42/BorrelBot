@@ -50,6 +50,8 @@ class set_destination():
 	def __init__(self, 
 				model, 
 				agent=None, speed=15, acceleration=5):
+		global rad_per_step_list
+		global min_max_servo_steps_list
 
 		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561]
 		min_max_servo_steps_list = [[3968, 8000], [3000, 9984], [4000, 8000], [2000, 8500]]
@@ -62,11 +64,6 @@ class set_destination():
 		
 
 		
-
-		
-
-
-
 	def set_speed_acceleration(self, servo_number):
 		'''
 			Args:
@@ -163,8 +160,8 @@ class set_destination():
 			# self.agent.setTarget(3, self.get_steps_from_position(arm, 3)) # Wrist
 
 			for i in range(4):
-				self.set_speed_acceleration(self.agent, i)
-				self.agent.setTarget(i, self.get_steps_from_position(arm, i)) # Base
+				self.set_speed_acceleration(i)
+				self.agent.setTarget(i, self.get_steps_from_position(i)) # Base
 
 		
 	
