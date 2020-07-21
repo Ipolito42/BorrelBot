@@ -47,7 +47,7 @@ global rad_per_step_list
 global min_max_servo_steps_list
 
 class set_destination():
-	def __init__(self, model, destination_coordinates, agent=None):
+	def __init__(self, destination_coordinates, model, agent=None):
 
 		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561]
 		min_max_servo_steps_list = [[3968, 8000], [3000, 9984], [4000, 8000], [2000, 8500]]
@@ -111,7 +111,6 @@ class set_destination():
 
 	def main(self, speed=15):
 		self.set_destination_coordinates()
-		print(self.destination)
 		self.model.ee = self.destination_model
 		tinyik.visualize(self.model)
 
@@ -159,4 +158,4 @@ destination_coordinates = [float((input("Give x: "))),float((input("Give y: ")))
 
 
 if __name__ == "__main__":
-	set_destination(arm_model, destination_coordinates, servo_agent).main()
+	set_destination(destination_coordinates, arm_model, servo_agent).main()
