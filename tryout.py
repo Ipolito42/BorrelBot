@@ -15,22 +15,26 @@ servo = maestro.Controller('COM8') # Setup connection with the correct USB port
 # arm.angles=[np.pi/6, 0, np.pi/6, 0, 0]
 
 theta = np.arctan(36/14)
-x_0 = 120*np.cos(np.arctan(theta))
-z_0 = 120*np.sin(np.arctan(theta))
 
-x_1 = 90*np.cos(np.arctan(theta))
-z_1 = 90*np.sin(np.arctan(theta))
+x_0 = 0.14
+z_0 = 0.36
 
-x_2 = 28*np.cos(np.arctan(theta))
-z_2 = 28*np.sin(np.arctan(theta))
+x_1 = (120*np.cos(np.arctan(theta)) + 0.14)/100
+z_1 = (120*np.sin(np.arctan(theta)) + 0.36)/100
+
+x_2 = (90*np.sin(np.arctan(theta)) + x_1)/100
+z_2 = (z_1 - 90*np.cos(np.arctan(theta)))/100
+
+x_3 = (28*np.sin(np.arctan(theta)) + x_2)/100
+z_3 = (z_2 - 28*np.cos(np.arctan(theta)))/100
 
 
 
-arm = tinyik.Actuator(['z', [0.14, 0., 0.36], 'y', [x_0/100, 0, z_0/100], 'y', [x_1/100, 0, z_1/100], 'x', [x_2/100, 0, z_2/100]])
+arm = tinyik.Actuator(['z', [x_0, 0., z_0], 'y', [x_1, 0, z_1], 'y', [x_2, 0, z_2], 'x', [x_3 , 0, z_3]])
 # arm = tinyik.Actuator(['z', [0.15, 0., 0.4], 'y', [0.421, 0, 1.124], 'y', [0.337, 0, 0.834], 'x', [0.105, 0, 0.2596], 'y', [0.405, 0, 1.012]])
 # arm.angles = [[0, 0, 0]]
-destination_coordinates = [ 0 + 1.81472887, 0, 0 + 0.52638276]
-arm.ee = destination_coordinates
+# destination_coordinates = [ 0 + 1.81472887, 0, 0 + 0.52638276]
+# arm.ee = destination_coordinates
 
 # servo.setSpeed(2, 30)
 # servo.setTarget(2, 8000)
