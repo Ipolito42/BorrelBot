@@ -114,8 +114,7 @@ class set_destination():
 		'''
 		self.destination = [[self.destination_coordinates[0][0] + 1.66371003, self.destination_coordinates[0][1], self.destination_coordinates[0][2] + 2.18830734]]
 		self.destination_model = [[self.destination_coordinates[0][0] + 1.81472887, self.destination_coordinates[0][1], self.destination_coordinates[0][2] + 0.52638276]]
-		# 0 + 1.81472887, 0, 0 + 0.52638276
-		print("Destination coordinates:", self.destination)
+		# print("Destination coordinates:", self.destination)
 
 	
 
@@ -161,43 +160,4 @@ class set_destination():
 
 			for i in range(4):
 				self.set_speed_acceleration(i)
-				self.agent.setTarget(i, self.get_steps_from_position(i)) # Base
-
-		
-	
-
-
-
-
-
-
-
-# # Calculate analytic model parameters
-# theta = np.arctan(36/14)
-# x_0 = 120*np.cos(np.arctan(theta))
-# z_0 = 120*np.sin(np.arctan(theta))
-
-# x_1 = 90*np.cos(np.arctan(theta))
-# z_1 = 90*np.sin(np.arctan(theta))
-
-# x_2 = 28*np.cos(np.arctan(theta))
-# z_2 = 28*np.sin(np.arctan(theta))
-
-
-# try: 
-# 	servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
-# except: servo_agent=None
-
-# arm_model = tinyik.Actuator(['z', [0.14, 0., 0.36], # Base
-# 							'y', [x_0/100, 0, z_0/100], # Base arm
-# 							'y', [x_1/100, 0, z_1/100], # Elbow
-# 							'x', [x_2/100, 0, z_2/100]]) # Wrist
-
-# destination_coordinates = [float((input("Give x: "))),float((input("Give y: "))),float((input("Give z: ")))]
-
-# set_destination(destination_coordinates, arm_model, servo_agent).main()
-
-
-# # if __name__ == "__main__":
-
-	
+				self.agent.setTarget(i, self.get_steps_from_position(i))

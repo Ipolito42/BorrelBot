@@ -6,104 +6,147 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-global cap_width
-global camera_focal_length
+global cap_width, camera_focal_length
 cap_width = 3 # cm
-camera_focal_length = 900 # pixels 1430 for the camera we have        1050 is for my laptop
+camera_focal_length = 900 # pixels 1430 for the camera we have        900 is for my laptop
 
-def mask_color(frame):
-	img_converted = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
-	# HLS
-	# white = [[50, 50, 180], [170, 180, 255]]
-	# HSV
-	white = [[10, 120, 210], [50, 255, 255]]
 
-	lower = np.array(white[0])
-	upper = np.array(white[1])
+
+
+
+
+class camera_code():
+	def __init__(self, 
+				):
+
+		global cap_width, camera_focal_length
+
+		self.cam = cv2.VideoCapture(0)
+		self.cam.set(3,1280) # Width
+		self.cam.set(4,1024) # Height
+		# self.cam.set(5, 25) # Frame rate
+		self.cam.set(15, -5) # Exposure time 2^(-5)
+
 		
-	mask = cv2.inRange(img_converted, lower, upper)
-	img_masked = cv2.bitwise_and(img_converted, img_converted, mask = mask)
-	img_masked = cv2.GaussianBlur(img_masked, (5,5),0)
 
-	return img_masked, mask, img_converted
-
-
-
-def detect_ellipse(image, frame):
-	#--- First obtain the threshold using the greyscale image ---
-
-	
-
-
-	output = frame.copy()
-	gray = cv2.cvtColor(output, cv2.COLOR_RGB2GRAY)
-	gray = cv2.GaussianBlur(gray, (5,5),0)
-	ret,th = cv2.threshold(gray,127,255, 0)
-
-	#--- Find all the contours in the binary image ---
-	contours,hierarchy = cv2.findContours(th,2,1)
-	cnt = contours
-	big_contour = []
-	max_area = 0
-	for i in cnt:
-		area = cv2.contourArea(i) #--- find the contour having biggest area ---
-		if(area > max_area):
-			max_area = area
-			big_contour = i
-			try:
-				ellipse = cv2.fitEllipse(i) # (xcenter,ycenter), (MA,ma), angle
-				axes = ellipse[1]
-				minor, major = axes
-				text_dist = int(np.sqrt(minor**2 + major**2))
-				x = int(ellipse[0][0])
-				y = int(ellipse[0][1])
-			except: pass
-	try:
-		cap_distance = camera_focal_length*cap_width/major
-		cv2.putText(image, "{:.1f}".format(cap_distance) , (x+text_dist/3,y+text_dist/3), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
-		# Draw the fitted ellipse
-		output = cv2.ellipse(image,ellipse,(0,255,0),2)
 		
-	except:
-		output = image
+		
 
-	# Draw the biggest contour if an ellipse is not successfully fitted
-	# output = cv2.drawContours(image, big_contour, -1, (255,0,0), 3)
-	return output
+
+	def mask_color(self,):
+		self.img_HSV = cv2.cvtColor(self.frame, cv2.COLOR_RGB2HSV)
+		# HSV
+		# true_gray_Card = [0,0,209]
+		# observed_gray_card = self.img_HSV[240,360,:]
+		# subtraction = observed_gray_card - true_gray_Card
+		
+		
+		# true_blue_mask = [[130, 200, 210], [140, 210, 220]]
+		# 137, 204, 217
+		
+		color = [[10, 120, 210], [50, 255, 255]]
+		# gray_card = [[209,0,0]]	
+
+		lower_mask_boundary = np.array(color[0])
+		upper_mask_boundary = np.array(color[1])
+			
+		self.mask = cv2.inRange(self.img_HSV, lower_mask_boundary, upper_mask_boundary)
+		self.img_masked = cv2.bitwise_and(self.img_HSV, self.img_HSV, mask = self.mask)
+		self.img_masked = cv2.GaussianBlur(self.img_masked, (5,5),0)
+
+
+
+	def detect_ellipse(self,):
+		#--- First obtain the threshold using the greyscale frame ---
+
+		self.img_fit_ellipse = self.img_masked.copy()
+		gray = cv2.cvtColor(self.img_fit_ellipse, cv2.COLOR_RGB2GRAY)
+		gray = cv2.GaussianBlur(gray, (5,5),0)
+		ret,th = cv2.threshold(gray,127,255, 0)
+
+		#--- Find all the contours in the binary frame ---
+		contours,hierarchy = cv2.findContours(th,2,1)
+		cnt = contours
+		big_contour = []
+		max_area = 0
+		self.ellipse = None
+		for i in cnt:
+			area = cv2.contourArea(i) #--- find the contour having biggest area ---
+			if(area > max_area):
+				max_area = area
+				big_contour = i
+				try:
+					self.ellipse = cv2.fitEllipse(i) # (xcenter,ycenter), (MA,ma), angle
+					axes = self.ellipse[1]
+					self.minor, self.major = axes
+					text_dist = int(np.sqrt(self.minor**2 + self.major**2))
+					self.xcenter = int(self.ellipse[0][0] - self.width/2)
+					self.ycenter = int(self.ellipse[0][1] - self.height/2)
+				except: pass
+
+		if self.ellipse != None:
+			self.get_coordinates()
+			# Draw the fitted ellipse
+			self.img_fit_ellipse = cv2.ellipse(self.frame,self.ellipse,(0,255,0),2)
+
+			# Draw the x,y,z coordinates around the ellipse as text
+			cv2.putText(self.img_fit_ellipse, "x={:.1f}".format(self.x_coordinate) ,
+						(int(self.xcenter + self.width/2 -text_dist/3),int(self.ycenter + self.height/2+text_dist/3)),
+						 cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 2)
+
+			cv2.putText(self.img_fit_ellipse, "y={:.1f}".format(self.y_coordinate) ,
+						(int(self.xcenter + self.width/2+text_dist/3),int(self.ycenter + self.height/2-text_dist/3)),
+						 cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
+
+			cv2.putText(self.img_fit_ellipse, "z={:.1f}".format(self.z_coordinate) ,
+						(int(self.xcenter + self.width/2+text_dist/3),int(self.ycenter + self.height/2+text_dist/3)),
+						 cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
+
+			
+			
+		else:
+			self.img_fit_ellipse = self.frame
+
+		# Draw the biggest contour if an ellipse is not successfully fitted
+			# self.img_fit_ellipse = cv2.drawContours(self.img_fit_ellipse, big_contour, -1, (255,0,0), 3)
 
 	
 
-counter = 0
-number_to_avg = 50
-radius_list = np.zeros(number_to_avg)
-cam = cv2.VideoCapture(0)
-cam.set(3,1280) # Width
-cam.set(4,1024) # Height
-# cam.set(5, 25) # Frame rate
-cam.set(15, -5) # Exposure time 2^(-5)
+	def get_coordinates(self,):
+		self.z_coordinate = camera_focal_length*cap_width/self.major
+		self.x_coordinate = self.xcenter * cap_width / self.major
+		self.y_coordinate = self.ycenter * cap_width / self.major
+
+
+	def main(self,show_camera=True):
+		ret, self.frame = self.cam.read()
+		self.height, self.width, _ = self.frame.shape
+		
+
+		self.mask_color()
+		self.detect_ellipse()
+
+		# For Testing
+		# print(img[240,360,:])
+		# cv2.circle(self.img_fit_ellipse, (360, 240), 10, (218, 177, 44), 4)
+		# 218, 177, 44
+
+		# img_HSV
+		# img_masked
+		# img_fit_ellipse
+
+		# To show the camera feed with the ellipse and the calculated coordinates
+		if show_camera:
+			cv2.imshow("input", self.img_fit_ellipse)
+
+		if self.ellipse != None:
+			return self.x_coordinate, self.y_coordinate, self.z_coordinate
 
 
 
-while True:
-	ret, img = cam.read()
-	img_masked, mask, img_converted = mask_color(img)
-	img_fit_ellipse = detect_ellipse(img, img_masked)
-
-	# For Testing
-
-	# print(img_converted[240,360,:])
-	# cv2.circle(img_converted, (360, 240), 10, (0, 255, 0), 4)
-
-	
-	cv2.imshow("input", img_fit_ellipse)
-
-	key = cv2.waitKey(1) & 0xFF
-	if key == ord("q"):
-		break
 
 
-cv2.destroyAllWindows() 
-cv2.VideoCapture(0).release()
+
 
 
 
