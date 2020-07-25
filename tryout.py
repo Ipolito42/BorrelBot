@@ -14,32 +14,49 @@ servo = maestro.Controller('COM8') # Setup connection with the correct USB port
 # print(arm.angles)
 # arm.angles=[np.pi/6, 0, np.pi/6, 0, 0]
 
-theta = np.arctan(36/14)
+theta = np.arctan(9.2/1.4)
 
-x_0 = 0.14
-z_0 = 0.36
-
-x_1 = (120*np.cos(np.arctan(theta)) + 0.14)/100
-z_1 = (120*np.sin(np.arctan(theta)) + 0.36)/100
-
-x_2 = (90*np.sin(np.arctan(theta)) + x_1)/100
-z_2 = (z_1 - 90*np.cos(np.arctan(theta)))/100
-
-x_3 = (28*np.sin(np.arctan(theta)) + x_2)/100
-z_3 = (z_2 - 28*np.cos(np.arctan(theta)))/100
+x_0 = 1.4
+z_0 = 9.2
 
 
+x_1 = (12*np.cos(theta))
+z_1 = (12*np.sin(theta))
 
-arm = tinyik.Actuator(['z', [x_0, 0., z_0], 'y', [x_1, 0, z_1], 'y', [x_2, 0, z_2], 'x', [x_3 , 0, z_3]])
-# arm = tinyik.Actuator(['z', [0.15, 0., 0.4], 'y', [0.421, 0, 1.124], 'y', [0.337, 0, 0.834], 'x', [0.105, 0, 0.2596], 'y', [0.405, 0, 1.012]])
-# arm.angles = [[0, 0, 0]]
-# destination_coordinates = [ 0 + 1.81472887, 0, 0 + 0.52638276]
-# arm.ee = destination_coordinates
+x_2 = (9*np.sin(theta))
+z_2 = (-9*np.cos(theta))
 
+x_3 = (2.8*np.sin(theta))
+z_3 = (-2.8*np.cos(theta))
+
+x_4 = (8*np.sin(theta))/10
+z_4 = (8*np.cos(theta))/10
+
+
+
+arm = tinyik.Actuator(['z', [x_0, 0., z_0], 'y', [x_1, 0, z_1], 'y', [x_2, 0, z_2], 'x', [x_3 , 0, z_3], 'y', [x_4, 0, z_4]])
+# kwstas = tinyik.Actuator(['z', [x_0, 0., z_0], 'y', [x_1, 0, z_1]])
+arm = tinyik.Actuator(['z', [x_0, 0., z_0], 'y', [x_1, 0, z_1], 'y', [x_2, 0, z_2], 'x', [x_3 , 0, z_3], 'y', [x_4, 0, z_4]])
+# del(kwstas)
+# arm.angles = [0,np.pi/2]
+destination_coordinates = [10, 0, 5]
+arm.ee = destination_coordinates
+print("asdasd", 12*np.sin(theta + arm.angles[1]))
+tinyik.visualize(arm)
+
+
+kwstas = tinyik.Actuator(['z', [x_0, 0., z_0], 'y', [x_1, 0, z_1]])
+kwstas.angles = [arm.angles[0], arm.angles[1]]
+print(kwstas.ee)
+# joint = tinyik.visualizer.Joint(arm.components[4])
+# geo = joint.geo()
+# print(joint.geo())
+
+# print(arm.components[3].coord)
+# print(arm.components[4].coord)
+
+
+
+# tinyik.visualize(kwstas)
 # servo.setSpeed(2, 30)
 # servo.setTarget(2, 8000)
-
-# print()
-# print(120*np.sin(np.arctan(theta)))
-# print(np.rad2deg(np.arctan(36/7)))
-tinyik.visualize(arm)

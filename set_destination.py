@@ -111,15 +111,6 @@ class set_destination():
 		return steps
 
 
-	def set_destination_coordinates(self,):
-		'''
-			Args: None
-			Sets the corrected destination coordinates
-		'''
-		self.destination = [[self.destination_coordinates[0][0] + 1.66371003, self.destination_coordinates[0][1], self.destination_coordinates[0][2] + 2.18830734]]
-		self.destination_model = [[self.destination_coordinates[0][0] + 1.81472887, self.destination_coordinates[0][1], self.destination_coordinates[0][2] + 0.52638276]]
-		# print("Destination coordinates:", self.destination)
-
 
 	def set_to_parked_position(self,):
 		'''
@@ -135,6 +126,7 @@ class set_destination():
 		self.agent.setTarget(3, servo_steps_list[3][2])
 
 
+
 	def main(self, destination_coordinates, vizualization=True):
 		'''
 			Args:
@@ -144,8 +136,7 @@ class set_destination():
 			Moves the motors to the destination coordinates and if requested pops a vizualization window of the model
 		'''
 		self.destination_coordinates = [destination_coordinates]
-		self.set_destination_coordinates()
-		self.model.ee = self.destination_model
+		self.model.ee = self.destination_coordinates
 		if vizualization:
 			tinyik.visualize(self.model)
 

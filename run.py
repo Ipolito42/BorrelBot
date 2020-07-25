@@ -13,23 +13,24 @@ from camera_code import camera_code
 
 
 # Calculate analytic model parameters
-theta = np.arctan(36/14)
+theta = np.arctan(9.2/1.4)
 
-x_0 = 0.14
-z_0 = 0.36
-
-x_1 = (120*np.cos(np.arctan(theta)) + 0.14)/100
-z_1 = (120*np.sin(np.arctan(theta)) + 0.36)/100
-
-x_2 = (90*np.sin(np.arctan(theta)) + x_1)/100
-z_2 = (z_1 - 90*np.cos(np.arctan(theta)))/100
-
-x_3 = (28*np.sin(np.arctan(theta)) + x_2)/100
-z_3 = (z_2 - 28*np.cos(np.arctan(theta)))/100
+x_0 = 1.4
+z_0 = 9.2
 
 
+x_1 = (12*np.cos(theta))
+z_1 = (12*np.sin(theta))
 
-arm = tinyik.Actuator(['z', [x_0, 0., z_0], 'y', [x_1, 0, z_1], 'y', [x_2, 0, z_2], 'x', [x_3 , 0, z_3]])
+x_2 = (9*np.sin(theta))
+z_2 = (-9*np.cos(theta))
+
+x_3 = (2.8*np.sin(theta))
+z_3 = (-2.8*np.cos(theta))
+
+x_4 = (8*np.sin(theta))/10
+z_4 = (8*np.cos(theta))/10
+
 
 
 
@@ -42,17 +43,11 @@ except: servo_agent=None
 
 # Make tinyik model with our servos coordinates and directions
 
-arm = tinyik.Actuator(['z', [0.14, 0., 0.36], # Base
-				  	'y', [x_0, 0, z_0], # Base arm
-					'y', [x_1, 0, z_1], # Elbow
-					'x', [x_2 , 0, z_2]]) # Wrist
-
-
-# arm_model = tinyik.Actuator(['z', [0.14, 0., 0.36], # Base
-# 							'y', [x_0/100, 0, z_0/100], # Base arm
-# 							'y', [x_1/100, 0, z_1/100], # Elbow
-# 							'x', [x_2/100, 0, z_2/100]]) # Wrist
-
+arm = tinyik.Actuator([ 'z', [x_0, 0., z_0], # Base
+						'y', [x_1, 0, z_1], # Base arm
+						'y', [x_2, 0, z_2], # Elbow
+						'x', [x_3 , 0, z_3], # Wrist
+						'y', [x_4, 0, z_4]]) # Grappler
 
 
 # Destination coordinates will be given by the camera
