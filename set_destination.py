@@ -58,7 +58,7 @@ class set_destination():
 
 		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561]
 		# min_max_servo_steps_list = [[3968, 8000], [3000, 9984], [4000, 8000], [2000, 8500]]
-		servo_steps_list = [[3968, 5984, 8000], [3000, 6492, 9984], [4000, 6000, 8000], [2000, 5250, 8500]]
+		servo_steps_list = [[3968, 5998, 8000], [3000, 6646, 9984], [4000, 5775, 8000], [2000, 6016, 8500]]
 
 		self.model = model
 		self.agent = agent
@@ -83,9 +83,8 @@ class set_destination():
 				servo_number: Servo number on the board
 			Returns the steps required for the servos to rotate to the appropriate angle calculated from the IK model
 		'''
-		rad_per_step = rad_per_step_list[servo_number]
 		servo_steps = servo_steps_list[servo_number]  # has beginning, middle, and end of a given servo
-		steps = int(servo_steps[1] + (self.model.angles[servo_number])/rad_per_step) # middle step is called without if-statements
+		steps = int(servo_steps[1] + (self.model.angles[servo_number])/rad_per_step_list[servo_number]) # middle step is called without if-statements
 		# if servo_number==0:
 		# 	steps = int(servo_0_middle + self.model.angles[servo_number]/rad_per_step)
 		# if servo_number==1:
@@ -136,6 +135,7 @@ class set_destination():
 			Moves the motors to the destination coordinates and if requested pops a vizualization window of the model
 		'''
 		self.destination_coordinates = [destination_coordinates]
+		# self.destination_coordinates[0][-1] = - self.destination_coordinates[0][-1]
 		self.model.ee = self.destination_coordinates
 		if vizualization:
 			tinyik.visualize(self.model)
