@@ -76,6 +76,7 @@ while 1:
       if (useOrientation == 1):
         jointPoses = p.calculateInverseKinematics(kukaId, kukaEndEffectorIndex, pos, orn, ll, ul,
                                                   jr, rp)
+        print(jointPoses)
       else:
         jointPoses = p.calculateInverseKinematics(kukaId,
                                                   kukaEndEffectorIndex,
@@ -84,6 +85,7 @@ while 1:
                                                   upperLimits=ul,
                                                   jointRanges=jr,
                                                   restPoses=rp)
+        print(jointPoses)
     else:
       if (useOrientation == 1):
         jointPoses = p.calculateInverseKinematics(kukaId,
@@ -94,11 +96,13 @@ while 1:
                                                   solver=ikSolver,
                                                   maxNumIterations=100,
                                                   residualThreshold=.01)
+        print(jointPoses)
       else:
         jointPoses = p.calculateInverseKinematics(kukaId,
                                                   kukaEndEffectorIndex,
                                                   pos,
                                                   solver=ikSolver)
+        print(jointPoses)
 
     if (useSimulation):
       for i in range(numJoints):
