@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="learn" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <link name="base_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder radius="0.5" length="0.056" />
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="joint_a1" type="revolute">
+        <origin rpy="0 0 0" xyz="0.0000 0.0000 0.0560"/>
+        <parent link="base_link"/>
+        <child link="link_1"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="0" lower="-3.228859205" upper="3.228859205" velocity="2.146755039"/>
+    </joint>
+
+
+    <link name="link_01">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <geometry>
+                <cylinder radius="0.35" length="0.4" />
+            </geometry>
+        </visual>
+    </link>
+
+</robot>
