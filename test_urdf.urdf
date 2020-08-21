@@ -5,7 +5,7 @@
 <robot name="test_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <link name="base_link">
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.1", length="0.056"/>
       </geometry>
@@ -41,7 +41,7 @@
 
   <link name="link_2">
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.03", length="0.12"/>
       </geometry>
@@ -63,7 +63,7 @@
 
   <link name="link_3">
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.03", length="0.09"/>
       </geometry>
@@ -84,7 +84,7 @@
 
   <link name="link_4">
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.03", length="0.028"/>
       </geometry>
@@ -105,7 +105,7 @@
 
   <link name="link_5">
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.03", length="0.08"/>
       </geometry>
