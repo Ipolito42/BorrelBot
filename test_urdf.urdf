@@ -10,20 +10,20 @@
       <inertia ixx="89.282" ixy="-0.47721" ixz="0.85562" iyy="107.51" iyz="0.0067576" izz="172.02"/>
     </inertial>
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.1", length="0.056"/>
+        <cylinder radius="0.1" length="0.056"/>
       </geometry>
       <material name="">
         <color rgba="0.75294 0.75294 0.75294 1"/>
       </material>
     </visual>
     <collision>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.1", length="0.056"/>
+        <cylinder radius="0.1" length="0.056"/>
       </geometry>
     </collision>
   </link>
@@ -37,7 +37,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.0386"/>
+        <cylinder radius="0.03" length="0.0386"/>
       </geometry>
       <material name="">
         <color rgba="0.75294 0.75294 0.75294 1"/>
@@ -47,21 +47,21 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.0386"/>
+        <cylinder radius="0.03" length="0.0386"/>
       </geometry>
     </collision>
   </link>
   <link name="link_2">
     <inertial>
-      <origin rpy="0 0 0" xyz="0.0600 0.0000 0.1305"/>
+      <origin rpy="0 0.6971631336422324 0" xyz="0.0600 0.0000 0.1305"/>
       <mass value="958.62"/>
       <inertia ixx="180.42" ixy="-0.83462" ixz="0.32549" iyy="177.68" iyz="-20.82" izz="20.495"/>
     </inertial>
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0.6971631336422324 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.12"/>
+        <cylinder radius="0.03" length="0.12"/>
       </geometry>
       <material name="">
         <color rgba="0.75294 0.75294 0.75294 1"/>
@@ -71,21 +71,21 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.12"/>
+        <cylinder radius="0.03" length="0.12"/>
       </geometry>
     </collision>
   </link>
   <link name="link_3">
     <inertial>
-      <origin rpy="0 0 0" xyz="0.1349 0.0000 0.1345"/>
+      <origin rpy="0 1.39432 0" xyz="0.1349 0.0000 0.1345"/>
       <mass value="710.03"/>
       <inertia ixx="11.887" ixy="-0.12154" ixz="-1.3604" iyy="98.805" iyz="-0.056505" izz="96.251"/>
     </inertial>
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 1.39432 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.09"/>
+        <cylinder radius="0.03" length="0.09"/>
       </geometry>
       <material name="">
         <color rgba="0.75294 0.75294 0.75294 1"/>
@@ -95,7 +95,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.09"/>
+        <cylinder radius="0.03" length="0.09"/>
       </geometry>
     </collision>
   </link>
@@ -106,10 +106,10 @@
       <inertia ixx="1.8001" ixy="-0.18515" ixz="0.00051232" iyy="5.514" iyz="0.00070469" izz="6.3498"/>
     </inertial>
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.028"/>
+        <cylinder radius="0.03" length="0.028/"/>
       </geometry>
       <material name="">
         <color rgba="0.75294 0.75294 0.75294 1"/>
@@ -119,7 +119,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.028"/>
+        <cylinder radius="0.03" length="0.028/"/>
       </geometry>
     </collision>
   </link>
@@ -130,10 +130,10 @@
       <inertia ixx="0.3938" ixy="-0.085332" ixz="1.7223E-06" iyy="0.68945" iyz="-7.0292E-06" izz="0.67292"/>
     </inertial>
     <visual>
-      <origin rpy="-1.570796327 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.08"/>
+        <cylinder radius="0.03" length="0.08"/>
       </geometry>
       <material name="">
         <color rgba="0.75294 0.75294 0.75294 1"/>
@@ -143,7 +143,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!-- <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/> -->
-        <cylinder radius="0.03", length="0.08"/>
+        <cylinder radius="0.03" length="0.08"/>
       </geometry>
     </collision>
   </link>
