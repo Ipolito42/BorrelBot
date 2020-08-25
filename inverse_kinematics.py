@@ -16,6 +16,7 @@ kukaId = p.loadURDF("test_urdf.urdf", [0, 0, 0])
 p.resetBasePositionAndOrientation(kukaId, [0, 0, 0], [0, 0, 0, 1])
 kukaEndEffectorIndex = 6
 numJoints = p.getNumJoints(kukaId)
+print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
 while True:
   try:
     a=1
@@ -25,15 +26,15 @@ while True:
 #   exit()
 
 # #lower limits for null space
-# ll = [-.967, -2, -2.96, 0.19, -2.96, -2.09, -3.05]
+# ll = [-.967, -2, -2.96, 0.19, -2.96]
 # #upper limits for null space
-# ul = [.967, 2, 2.96, 2.29, 2.96, 2.09, 3.05]
+# ul = [.967, 2, 2.96, 2.29, 2.96]
 # #joint ranges for null space
-# jr = [5.8, 4, 5.8, 4, 5.8, 4, 6]
+# jr = [5.8, 4, 5.8, 4, 5.8]
 # #restposes for null space
-# rp = [0, 0, 0, 0.5 * math.pi, 0, -math.pi * 0.5 * 0.66, 0]
+# rp = [0, 0, 0, 0.5 * math.pi, 0]
 # #joint damping coefficents
-# jd = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+# jd = [0.1, 0.1, 0.1, 0.1, 0.1]
 
 # for i in range(numJoints):
 #   p.resetJointState(kukaId, i, rp[i])
