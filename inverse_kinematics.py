@@ -1,66 +1,82 @@
+#!/usr/bin/env python
+# coding: Latin-1
+
 import pybullet as p
 import time
 import math
 from datetime import datetime
 import pybullet_data
-
-clid = p.connect(p.GUI)
-if (clid < 0):
-  p.connect(p.GUI)
-  #p.connect(p.SHARED_MEMORY_GUI)
-
-p.setAdditionalSearchPath(pybullet_data.getDataPath())
-
-p.resetSimulation()
-p.loadURDF("plane.urdf", [0, 0, -0.3])
-robot = p.loadURDF("kuka_experimental/kuka_kr210_support/urdf/kr210l150.urdf", [0, 0, 0], useFixedBase=1)
-p.resetBasePositionAndOrientation(robot, [0, 0, 0], [0, 0, 0, 1])
-robotEndEffectorIndex = 6
-numJoints = p.getNumJoints(robot)
-
-control_mode = p.POSITION_CONTROL
-p.setGravity(0, 0, -9.81)
-
-
-rp = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi, 0]
-for i in range(numJoints):
-  p.resetJointState(robot, i, rp[i])
-
-
-
-camera_joint = 3
-joint_info = p.getJointInfo(robot, camera_joint)[14]
-# joint_axis, joint_parentFramePos, joint_parentFrameOrn  = joint_info[13], joint_info[14], joint_info[15]
-print("position = ", joint_info)
+import numpy as np
 
 
 
 
+class inverse_kinematics():
+  def __init__(self, 
+				):
+    pass
 
-time.sleep(1)
-destination_coordinates = [0.4,0,0.3]
-joint_pos = p.calculateInverseKinematics(robot,
-                                          robotEndEffectorIndex, 
-                                          destination_coordinates)
-
-print(joint_pos)                                  
-for i in range(numJoints):
-  p.setJointMotorControl2(bodyIndex = robot,
-                          jointIndex = i,
-                          controlMode = control_mode,
-                          targetPosition = joint_pos[i]
-                          , targetVelocity = 5
-                          )
-
-
-for _ in range(100):
-  p.stepSimulation()
-  time.sleep(1./10.)
   
-joint_info = p.getJointInfo(robot, camera_joint)[14]
-print(joint_info)
+  def initialize_GUI(self):
+    clid = p.connect(p.GUI)
+    # if (clid < 0):
+    #   p.connect(p.GUI)
+    #   #p.connect(p.SHARED_MEMORY_GUI)
 
-# blah = input('press enter to continue')
+    p.setAdditionalSearchPath(pybullet_data.getDataPath())
+
+    p.resetSimulation()
+    p.loadURDF("plane.urdf", [0, 0, -0.3])
+    self.robot = p.loadURDF("kuka_iiwa/model.urdf", [0, 0, 0], useFixedBase=1)
+    p.resetBasePositionAndOrientation(self.robot, [0, 0, 0], [0, 0, 0, 1])
+    self.robotEndEffectorIndex = 6
+    self.numJoints = p.getNumJoints(self.robot)
+
+    p.setGravity(0, 0, -9.81)
+    self.camera_joint = 3
+
+    self.joint_pos_angle = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi, 0]
+    for i in range(self.numJoints):
+      p.resetJointState(self.robot, i, self.joint_pos_angle[i])
+
+
+
+  def get_motor_position_angles(self, destination_coordinates):
+    
+    self.initialize_GUI()
+    # Get the camera position
+
+    camera_position = np.array(p.getJointInfo(self.robot, self.camera_joint)[14])
+    self.destination_coordinates = destination_coordinates
+
+    time.sleep(1)
+    # Correct for the camera location
+    self.destination_coordinates += camera_position
+    # Correct to grab the bottle 3cm below the cap
+    self.destination_coordinates -= np.array([0, 0, 0.03])
+    self.joint_pos_angle = p.calculateInverseKinematics(self.robot,
+                                              self.robotEndEffectorIndex, 
+                                              self.destination_coordinates)
+
+    print(self.joint_pos_angle)                                  
+    for i in range(self.numJoints):
+      p.setJointMotorControl2(bodyIndex = self.robot,
+                              jointIndex = i,
+                              controlMode = p.POSITION_CONTROL,
+                              targetPosition = self.joint_pos_angle[i]
+                              , targetVelocity = 5
+                              )
+
+
+    for _ in range(100):
+      p.stepSimulation()
+      time.sleep(1./10.)
+      
+    p.disconnect()
+
+    return self.joint_pos_angle
+
+
 
 
 # print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
@@ -206,4 +222,3 @@ print(joint_info)
 #   prevPose = pos
 #   prevPose1 = ls[4]
 #   hasPrevPose = 1
-p.disconnect()

@@ -9,38 +9,14 @@ import numpy as np
 
 from set_destination import set_destination
 from camera_code import camera_code
-
-
-
-# # Calculate analytic model parameters
-# theta = np.arccos(9.2/12)
-
-# x_0 = 1.4
-# z_0 = 3.6
-
-
-# x_1 = 12*np.cos(theta)
-# z_1 = 12*np.sin(theta)
-
-
-# x_2 = 9*np.sin(theta)
-# z_2 = -9*np.cos(theta)
-
-# x_3 = 2.8*np.sin(theta)
-# z_3 = -2.8*np.cos(theta)
-
-# x_4 = 8
-# z_4 = 0
-
-
+from inverse_kinematics import inverse_kinematics
 
 
 
 # If servo controller is connected to port COM8 it will run the motors
-# Otherwise it just runs the model and skips the motor code
 try: 
 	servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
-except: servo_agent=None
+except: servo_agent = None
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------Destination coordinates will be given by the camera---------------------------------
@@ -56,6 +32,7 @@ try:
 	# Initialize the classes
 	camera = camera_code()
 	motors = set_destination(servo_agent)
+	ik = inverse_kinematics()
 
 	# Wait a sec to properly initialize everything
 	time.sleep(1)
@@ -75,7 +52,7 @@ try:
 
 		
 		# inverse_kinematics is the pybullet class which calculates the position angle for each motor given the destination coordinates
-		pos_angles = inverse_kinematics(destination_coordinates)
+		pos_angles = ik.get_motor_position_angles(destination_coordinates)
 		# Move motors such that the endpoint reaches to the destination coordinates
 		motors.main(pos_angles)
 
