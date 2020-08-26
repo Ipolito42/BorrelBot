@@ -13,7 +13,7 @@ p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
 p.resetSimulation()
 p.loadURDF("plane.urdf", [0, 0, -0.3])
-robot = p.loadURDF("kuka_iiwa/model.urdf", [0, 0, 0], useFixedBase=1)
+robot = p.loadURDF("kuka_experimental/kuka_kr210_support/urdf/kr210l150.urdf", [0, 0, 0], useFixedBase=1)
 p.resetBasePositionAndOrientation(robot, [0, 0, 0], [0, 0, 0, 1])
 robotEndEffectorIndex = 6
 numJoints = p.getNumJoints(robot)
@@ -59,6 +59,8 @@ for _ in range(100):
   
 joint_info = p.getJointInfo(robot, camera_joint)[14]
 print(joint_info)
+
+# blah = input('press enter to continue')
 
 
 # print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
