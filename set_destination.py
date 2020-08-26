@@ -104,9 +104,9 @@ class set_destination():
 	def main(self, pos_angles):
 		steps = []
 		self.pos_angles = pos_angles
-		for i in range(4):
-			steps.append(self.get_steps_from_position(i))
-			print(steps, i)
+		# for i in range(4):
+		# 	steps.append(self.get_steps_from_position(i))
+		# 	print(steps, i)
 
 		if self.agent!=None:
 

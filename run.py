@@ -46,24 +46,23 @@ try:
 		destination_coordinates = camera.main(show_camera=True)
 
 		if destination_coordinates != None:
-			destination_coordinates_previous = destination_coordinates
-		elif destination_coordinates == None:
-			destination_coordinates = destination_coordinates_previous
+			if destination_coordinates[0] < 15 and destination_coordinates[1] < 15 and destination_coordinates[2] < 15:
+				print("TARGET LOCKED")
+			
+				# inverse_kinematics is the pybullet class which calculates the position angle for each motor given the destination coordinates
+				pos_angles = ik.get_motor_position_angles(destination_coordinates)
+				# Move motors such that the endpoint reaches to the destination coordinates
+				motors.main(pos_angles)
 
-		
-		# inverse_kinematics is the pybullet class which calculates the position angle for each motor given the destination coordinates
-		pos_angles = ik.get_motor_position_angles(destination_coordinates)
-		# Move motors such that the endpoint reaches to the destination coordinates
-		motors.main(pos_angles)
+				# Give some time to the motors to reach the destination
+				time.sleep(2)
 
-		# Give some time to the motors to reach the destination
-		time.sleep(2)
+				# Print the destination coordinates
+				print("x={:.1f}, y={:.1f} z={:.1f}".format(destination_coordinates[0], destination_coordinates[1], destination_coordinates[2]))
 
-		# Print the destination coordinates
-		if destination_coordinates != None:
-			print("x={:.1f}, y={:.1f} z={:.1f}".format(destination_coordinates[0], destination_coordinates[1], destination_coordinates[2]))
+				break
+				print("TARGET REACHED")
 
-		
 
 		key = cv2.waitKey(1) & 0xFF
 		if key == ord("q"):
