@@ -37,10 +37,6 @@ try:
 	# Wait a sec to properly initialize everything
 	time.sleep(1)
 
-	# Default value otherwise it's None type
-	destination_coordinates_previous = [0,0,0]
-
-
 	while True:
 		# Calculate the destination coordinates from an image
 		destination_coordinates = camera.main(show_camera=True)

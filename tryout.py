@@ -131,8 +131,25 @@ z_4 = 0 + z_3
 
 # Take the motors to default position
 
-servo = maestro.Controller('COM8') # Setup connection with the correct USB port
-servo.setTarget(4,7700)
+# servo = maestro.Controller('COM8') # Setup connection with the correct USB port
+# servo.setTarget(4,7700)
 # for i in range(6):
 #     # servo.setSpeed(i, 20)
 #     servo.setTarget(i, 6000)
+
+rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561, 0.000561]
+
+servo_steps_list = [[4000, 6000, 8000], [3000, 6000, 9900], [4000, 6000, 8000], [2000, 6000, 8500], [4000, 6000, 7700]] # [min, middle, max]
+minimums = []
+maximums = []
+for i in range(len(rad_per_step_list)):
+    a = -(servo_steps_list[i][1] - servo_steps_list[i][0]) * rad_per_step_list[i]
+    b = (servo_steps_list[i][2] - servo_steps_list[i][1]) * rad_per_step_list[i]
+    
+    minimums.append(a)
+    maximums.append(b)
+
+    print(a)
+
+# print(4000 * 0.000561)
+    

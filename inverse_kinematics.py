@@ -37,18 +37,18 @@ class inverse_kinematics():
     self.camera_joint = 3
 
     #lower limits for null space
-    self.ll = [-.967, -2, -2.96, 0.19, -2.96]
+    self.ll = [-1.082, -1.179, -0.786,-2.244, -1.122]
     #upper limits for null space
-    self.ul = [.967, 2, 2.96, 2.29, 2.96]
+    self.ul = [1.082, 1.5327, 0.786, 1.4025, 0.9537]
     #joint ranges for null space
     self.jr = [5.8, 4, 5.8, 4, 5.8]
     #restposes for null space
-    self.rp = [0, 0, 0, 0.5 * math.pi, 0]
+    self.rp = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi, 0]
     #joint damping coefficents
     self.jd = [0.1, 0.1, 0.1, 0.1, 0.1]
 
 
-    self.rp = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi, 0]
+    
     for i in range(self.numJoints):
       p.resetJointState(self.robot, i, self.rp[i])
 
@@ -68,15 +68,29 @@ class inverse_kinematics():
 
     self.joint_pos_angle = p.calculateInverseKinematics(self.robot,
                                               self.robotEndEffectorIndex, 
-                                              self.destination_coordinates)
+                                              self.destination_coordinates,
+                                              lowerLimits=self.ll,
+                                              upperLimits=self.ul,
+                                              jointRanges=self.jr,
+                                              restPoses=self.rp)
                              
     for i in range(self.numJoints):
       p.setJointMotorControl2(bodyIndex = self.robot,
                               jointIndex = i,
                               controlMode = p.POSITION_CONTROL,
-                              targetPosition = self.joint_pos_angle[i]
-                              , targetVelocity = 5
+                              targetPosition = self.joint_pos_angle[i],
+                              targetVelocity = 5
+
                               )
+
+
+    # jointPoses = p.calculateInverseKinematics(kukaId,
+#                                                   kukaEndEffectorIndex,
+#                                                   pos)
+#                                                   # lowerLimits=ll,
+#                                                   # upperLimits=ul,
+#                                                   # jointRanges=jr,
+#                                                   # restPoses=rp)
 
 
     for _ in range(30):
@@ -87,6 +101,8 @@ class inverse_kinematics():
 
     return self.joint_pos_angle
 
+ik = inverse_kinematics()
+pos = ik.get_motor_position_angles([-1,2,1])
 
 
 

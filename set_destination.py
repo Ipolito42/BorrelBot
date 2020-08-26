@@ -9,7 +9,7 @@ import numpy as np
 # servo base servo
 # 1 step is 0.031034482 deg = 0.0005416538925509148 rad
 # 	beginning = 3968 steps
-# 	middle = 5984 steps
+# 	middle = 6000 steps
 # 	end = 8000 steps
 
 # servo base arm servo
@@ -58,7 +58,7 @@ class set_destination():
 		global rad_per_step_list
 		global servo_steps_list
 
-		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561]
+		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561, 0.000561]
 		servo_steps_list = [[4000, 6000, 8000], [3000, 6000, 9900], [4000, 6000, 8000], [2000, 6000, 8500], [4000, 6000, 7700]] # [min, middle, max]
 
 		self.agent = agent
