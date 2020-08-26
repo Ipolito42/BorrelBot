@@ -25,7 +25,7 @@ class camera_code():
 		self.cam.set(3,1280) # Width
 		self.cam.set(4,1024) # Height
 		# self.cam.set(5, 25) # Frame rate
-		self.cam.set(15, -5) # Exposure time 2^(-5)
+		self.cam.set(15, -3) # Exposure time 2^(-5)
 
 		
 
@@ -113,9 +113,9 @@ class camera_code():
 	
 
 	def get_coordinates(self,):
-		self.z_coordinate = camera_focal_length*cap_width/self.major
-		self.x_coordinate = self.xcenter * cap_width / self.major
-		self.y_coordinate = self.ycenter * cap_width / self.major
+		self.x_coordinate = camera_focal_length*cap_width/self.major
+		self.y_coordinate = self.xcenter * cap_width / self.major
+		self.z_coordinate = -self.ycenter * cap_width / self.major
 
 
 	def main(self,show_camera=True):

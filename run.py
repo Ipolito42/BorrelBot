@@ -50,7 +50,7 @@ try:
 				print("TARGET LOCKED")
 			
 				# inverse_kinematics is the pybullet class which calculates the position angle for each motor given the destination coordinates
-				pos_angles = ik.get_motor_position_angles(destination_coordinates)
+				pos_angles = ik.get_motor_position_angles(np.array(destination_coordinates)/100)
 				# Move motors such that the endpoint reaches to the destination coordinates
 				motors.main(pos_angles)
 
@@ -58,7 +58,7 @@ try:
 				time.sleep(2)
 
 				# Print the destination coordinates
-				print("x={:.1f}, y={:.1f} z={:.1f}".format(destination_coordinates[0], destination_coordinates[1], destination_coordinates[2]))
+				print("x={:.1f}, y={:.1f} z={:.1f}".format(destination_coordinates[0]/100, destination_coordinates[1]/100, destination_coordinates[2]/100))
 
 				break
 				print("TARGET REACHED")

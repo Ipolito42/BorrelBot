@@ -19,6 +19,7 @@ class inverse_kinematics():
   
   def initialize_GUI(self):
     clid = p.connect(p.GUI)
+    
     # if (clid < 0):
     #   p.connect(p.GUI)
     #   #p.connect(p.SHARED_MEMORY_GUI)
@@ -49,7 +50,6 @@ class inverse_kinematics():
     camera_position = np.array(p.getJointInfo(self.robot, self.camera_joint)[14])
     self.destination_coordinates = destination_coordinates
 
-    time.sleep(1)
     # Correct for the camera location
     self.destination_coordinates += camera_position
     # Correct to grab the bottle 3cm below the cap
@@ -68,7 +68,7 @@ class inverse_kinematics():
                               )
 
 
-    for _ in range(100):
+    for _ in range(30):
       p.stepSimulation()
       time.sleep(1./10.)
       
