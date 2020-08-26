@@ -47,12 +47,10 @@ class inverse_kinematics():
     #joint damping coefficents
     self.jd = [0.1, 0.1, 0.1, 0.1, 0.1]
 
-
+  
     
     for i in range(self.numJoints):
       p.resetJointState(self.robot, i, self.rp[i])
-
-
 
   def get_motor_position_angles(self, destination_coordinates):
     
@@ -101,8 +99,25 @@ class inverse_kinematics():
 
     return self.joint_pos_angle
 
+
+# For trial
 ik = inverse_kinematics()
 pos = ik.get_motor_position_angles([-1,2,1])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
