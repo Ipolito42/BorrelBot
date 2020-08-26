@@ -7,7 +7,7 @@ import time
 import numpy as np
 # import tinyik
 
-# from set_destination import set_destination
+from set_destination import set_destination
 from camera_code import camera_code
 
 
@@ -37,34 +37,30 @@ from camera_code import camera_code
 
 
 # If servo controller is connected to port COM8 it will run the motors
-# # Otherwise it just runs the model and skips the motor code
-# try: 
-# 	servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
-# except: servo_agent=None
+# Otherwise it just runs the model and skips the motor code
+try: 
+	servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
+except: servo_agent=None
 
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------Destination coordinates will be given by the camera---------------------------------
+# --------------------------------------------This is for testing only-------------------------------------------------
 
-# Make tinyik model with our servos coordinates and directions
-
-# arm_model = tinyik.Actuator([ 'z', [x_0, 0., z_0], # Base
-# 						'y', [x_1, 0, z_1], # Base arm
-# 						'y', [x_2, 0, z_2], # Elbow
-# 						'x', [x_3 , 0, z_3], # Wrist
-# 						'y', [x_4, 0, z_4]]) # Grappler
-
-
-# Destination coordinates will be given by the camera
 # destination_coordinates = [float((input("Give x: "))),float((input("Give y: "))),float((input("Give z: ")))]
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 
 
 try:
-# 	# Initialize the classes
+	# Initialize the classes
 	camera = camera_code()
-# 	motors = set_destination(arm_model, servo_agent)
+	motors = set_destination(servo_agent)
 
-# 	# Wait a sec to properly initialize everything
+	# Wait a sec to properly initialize everything
 	time.sleep(1)
 
-# 	# 
+	# Default value otherwise it's None type
 	destination_coordinates_previous = [0,0,0]
 
 
@@ -77,11 +73,14 @@ try:
 		elif destination_coordinates == None:
 			destination_coordinates = destination_coordinates_previous
 
-# 		# Move motors such that the endpoint reaches to the destination coordinates
-# 		motors.main(destination_coordinates, vizualization=False)
+		
+		# inverse_kinematics is the pybullet class which calculates the position angle for each motor given the destination coordinates
+		pos_angles = inverse_kinematics(destination_coordinates)
+		# Move motors such that the endpoint reaches to the destination coordinates
+		motors.main(pos_angles)
 
-# 		# Give some time to the motors to reach the destination
-# 		time.sleep(1)
+		# Give some time to the motors to reach the destination
+		time.sleep(2)
 
 		# Print the destination coordinates
 		if destination_coordinates != None:
@@ -100,43 +99,6 @@ try:
 except KeyboardInterrupt:
 	print("User Shutdown")
 
-
-
-# try:
-# 	# Initialize the classes
-# 	motors = set_destination(arm_model, servo_agent)
-
-# 	# Wait a sec to properly initialize everything
-# 	# time.sleep(1)
-
-# 	destination_coordinates = [26,0., 10.]
-	
-
-
-# 	# Calculate the destination coordinates from an image
-# 	# Move motors such that the endpoint reaches to the destination coordinates
-# 	motors.main(destination_coordinates, vizualization=True)
-# 	print(arm_model.ee)
-# 	# Give some time to the motors to reach the destination
-# 	time.sleep(1)
-
-# 	# Print the destination coordinates
-# 	if destination_coordinates != None:
-# 		print("x={:.3f}, y={:.3f} z={:.3f}".format(destination_coordinates[0], destination_coordinates[1], destination_coordinates[2]))
-
-			
-
-
-# except KeyboardInterrupt:
-# 	print("User Shutdown")
-
-
-
-
-
-
-# Will loop over main with coordinates given by the camera in the loop
-# need to turn the vizualization parameter to false to run in the loop
 
 
 # motors.set_to_parked_position()

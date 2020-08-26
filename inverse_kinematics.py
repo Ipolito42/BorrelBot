@@ -3,9 +3,8 @@ import time
 import math
 from datetime import datetime
 import pybullet_data
-import camera_code as cc
 
-clid = p.connect(p.SHARED_MEMORY)
+clid = p.connect(p.GUI)
 if (clid < 0):
   p.connect(p.GUI)
   #p.connect(p.SHARED_MEMORY_GUI)
@@ -17,26 +16,70 @@ robot = p.loadURDF("urdf_straight.urdf", [0, 0, 0])
 p.resetBasePositionAndOrientation(robot, [0, 0, 0], [0, 0, 0, 1])
 robotEndEffectorIndex = 6
 numJoints = p.getNumJoints(robot)
-camjoint = 3 #Giannis verify, just a guess on my part
+camjoint = 3 # Giannis verify, just a guess on my part
 control_mode = p.POSITION_CONTROL
+
+rp = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi]
+for i in range(numJoints):
+  p.resetJointState(robot, i, rp[i])
+
+
+
+p.resetSimulation()
+planeID = p.loadURDF("plane.urdf")
+robot = p.loadURDF("kuka_kr210.urdf", [0, 0, 0], useFixedBase=1)
+p.setGravity(0, 0, -9.81)
+p.setRealTimeSimulation(0)
+
+
+
+
+
+
+useOrientation = 1
+#If we set useSimulation=0, it sets the arm pose to be the IK result directly without using dynamic control.
+#This can be used to test the IK result accuracy.
+useSimulation = 1
+useRealTimeSimulation = 0
+ikSolver = 0
+p.setRealTimeSimulation(useRealTimeSimulation)
+#trailDuration is duration (in seconds) after debug lines will be removed automatically
+#use 0 for no-removal
+trailDuration = 15
+
+
+
+
+
+
+
+
 # print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
-while True:
-  try:
-    a=1
-  except KeyboardInterrupt:
-    break
-if (numJoints != 6):
-  exit()
+# while True:
+#   try:
+#     a=1
+#   except KeyboardInterrupt:
+#     break
+# if (numJoints != 6):
+#   exit()
 
 end_dest = False
+destination_coordinates = [2,1,2]
+
 
 while not end_dest:
 
-  coords = cc.camera_code()
+  p.stepSimulation()
+  # Calculate the destination coordinates from an image
+  
   joint_info = p.getJointInfo(robot, camjoint)
   joint_axis, joint_parentFramePos, joint_parentFrameOrn  = joint_info[13], joint_info[14], joint_info[15]
-  coords += joint_parentFrameOrn # Not sure which one of the three works correctly
-  joint_pos = p.calculateInverseKinematics2(robot, robotEndEffectorIndex, coords)
+  # destination_coordinates += joint_parentFrameOrn # Not sure which one of the three works correctly
+
+  print(destination_coordinates)
+  joint_pos = p.calculateInverseKinematics(robot,
+                                            robotEndEffectorIndex, 
+                                            destination_coordinates)
   for i in range(numJoints):
     p.setJointMotorControl2(bodyIndex = robot,
                             jointIndex = i,
@@ -46,6 +89,8 @@ while not end_dest:
                             )
 
   #Need end condition
+  if KeyboardInterrupt:
+    exit()
 
 
 
@@ -104,7 +149,7 @@ while not end_dest:
 
 #     if (useNullSpace == 1):
 #       if (useOrientation == 1):
-#         jointPoses = p.calculateInverseKinematics(kukaId, kukaEndEffectorIndex, pos)#, orn, ll, ul,
+        # jointPoses = p.calculateInverseKinematics(kukaId, kukaEndEffectorIndex, pos)#, orn, ll, ul,
 #                                                   # jr, rp)
 #       else:
 #         jointPoses = p.calculateInverseKinematics(kukaId,

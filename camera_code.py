@@ -140,7 +140,7 @@ class camera_code():
 			cv2.imshow("input", self.img_fit_ellipse)
 
 		if self.ellipse != None:
-			return self.x_coordinate, self.y_coordinate, self.z_coordinate
+			return [self.x_coordinate, self.y_coordinate, self.z_coordinate]
 
 
 
