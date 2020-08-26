@@ -3,6 +3,7 @@ import time
 import math
 from datetime import datetime
 import pybullet_data
+import camera_code as cc
 
 clid = p.connect(p.SHARED_MEMORY)
 if (clid < 0):
@@ -12,29 +13,52 @@ if (clid < 0):
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
 p.loadURDF("plane.urdf", [0, 0, -0.3])
-kukaId = p.loadURDF("urdf_straight.urdf", [0, 0, 0])
-p.resetBasePositionAndOrientation(kukaId, [0, 0, 0], [0, 0, 0, 1])
-kukaEndEffectorIndex = 6
-numJoints = p.getNumJoints(kukaId)
-print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
+robot = p.loadURDF("urdf_straight.urdf", [0, 0, 0])
+p.resetBasePositionAndOrientation(robot, [0, 0, 0], [0, 0, 0, 1])
+robotEndEffectorIndex = 6
+numJoints = p.getNumJoints(robot)
+camjoint = 3 #Giannis verify, just a guess on my part
+control_mode = p.POSITION_CONTROL
+# print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
 while True:
   try:
     a=1
   except KeyboardInterrupt:
     break
-# if (numJoints != 7):
-#   exit()
+if (numJoints != 6):
+  exit()
 
-# #lower limits for null space
-# ll = [-.967, -2, -2.96, 0.19, -2.96]
-# #upper limits for null space
-# ul = [.967, 2, 2.96, 2.29, 2.96]
-# #joint ranges for null space
-# jr = [5.8, 4, 5.8, 4, 5.8]
-# #restposes for null space
+end_dest = False
+
+while not end_dest:
+
+  coords = cc.camera_code()
+  joint_info = p.getJointInfo(robot, camjoint)
+  joint_axis, joint_parentFramePos, joint_parentFrameOrn  = joint_info[13], joint_info[14], joint_info[15]
+  coords += joint_parentFrameOrn # Not sure which one of the three works correctly
+  joint_pos = p.calculateInverseKinematics2(robot, robotEndEffectorIndex, coords)
+  for i in range(numJoints):
+    p.setJointMotorControl2(bodyIndex = robot,
+                            jointIndex = i,
+                            controlMode = control_mode,
+                            targetPosition = joint_pos[i]
+                            # , targetVelocity = 1
+                            )
+
+  #Need end condition
+
+
+
+# # #lower limits for null space
+# # ll = [-.967, -2, -2.96, 0.19, -2.96]
+# # #upper limits for null space
+# # ul = [.967, 2, 2.96, 2.29, 2.96]
+# # #joint ranges for null space
+# # jr = [5.8, 4, 5.8, 4, 5.8]
+# # #restposes for null space
 # rp = [0, 0, 0, 0.5 * math.pi, 0]
-# #joint damping coefficents
-# jd = [0.1, 0.1, 0.1, 0.1, 0.1]
+# # #joint damping coefficents
+# # jd = [0.1, 0.1, 0.1, 0.1, 0.1]
 
 # for i in range(numJoints):
 #   p.resetJointState(kukaId, i, rp[i])
@@ -80,23 +104,23 @@ while True:
 
 #     if (useNullSpace == 1):
 #       if (useOrientation == 1):
-#         jointPoses = p.calculateInverseKinematics(kukaId, kukaEndEffectorIndex, pos, orn, ll, ul,
-#                                                   jr, rp)
+#         jointPoses = p.calculateInverseKinematics(kukaId, kukaEndEffectorIndex, pos)#, orn, ll, ul,
+#                                                   # jr, rp)
 #       else:
 #         jointPoses = p.calculateInverseKinematics(kukaId,
 #                                                   kukaEndEffectorIndex,
-#                                                   pos,
-#                                                   lowerLimits=ll,
-#                                                   upperLimits=ul,
-#                                                   jointRanges=jr,
-#                                                   restPoses=rp)
+#                                                   pos)
+#                                                   # lowerLimits=ll,
+#                                                   # upperLimits=ul,
+#                                                   # jointRanges=jr,
+#                                                   # restPoses=rp)
 #     else:
 #       if (useOrientation == 1):
 #         jointPoses = p.calculateInverseKinematics(kukaId,
 #                                                   kukaEndEffectorIndex,
 #                                                   pos,
 #                                                   orn,
-#                                                   jointDamping=jd,
+#                                                   # jointDamping=jd,
 #                                                   solver=ikSolver,
 #                                                   maxNumIterations=100,
 #                                                   residualThreshold=.01)
