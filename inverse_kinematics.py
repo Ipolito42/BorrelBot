@@ -4,37 +4,113 @@ import math
 from datetime import datetime
 import pybullet_data
 
-clid = p.connect(p.SHARED_MEMORY)
+clid = p.connect(p.GUI)
 if (clid < 0):
   p.connect(p.GUI)
   #p.connect(p.SHARED_MEMORY_GUI)
 
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
+p.resetSimulation()
 p.loadURDF("plane.urdf", [0, 0, -0.3])
-kukaId = p.loadURDF("urdf_straight.urdf", [0, 0, 0])
-p.resetBasePositionAndOrientation(kukaId, [0, 0, 0], [0, 0, 0, 1])
-kukaEndEffectorIndex = 6
-numJoints = p.getNumJoints(kukaId)
-print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
-while True:
-  try:
-    a=1
-  except KeyboardInterrupt:
-    break
-# if (numJoints != 7):
+robot = p.loadURDF("kuka_iiwa/model.urdf", [0, 0, 0], useFixedBase=1)
+p.resetBasePositionAndOrientation(robot, [0, 0, 0], [0, 0, 0, 1])
+robotEndEffectorIndex = 6
+numJoints = p.getNumJoints(robot)
+
+control_mode = p.POSITION_CONTROL
+p.setGravity(0, 0, -9.81)
+
+
+rp = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi, 0]
+for i in range(numJoints):
+  p.resetJointState(robot, i, rp[i])
+
+
+
+camera_joint = 3
+joint_info = p.getJointInfo(robot, camera_joint)[14]
+# joint_axis, joint_parentFramePos, joint_parentFrameOrn  = joint_info[13], joint_info[14], joint_info[15]
+print("position = ", joint_info)
+
+
+
+
+
+time.sleep(1)
+destination_coordinates = [0.4,0,0.3]
+joint_pos = p.calculateInverseKinematics(robot,
+                                          robotEndEffectorIndex, 
+                                          destination_coordinates)
+
+print(joint_pos)                                  
+for i in range(numJoints):
+  p.setJointMotorControl2(bodyIndex = robot,
+                          jointIndex = i,
+                          controlMode = control_mode,
+                          targetPosition = joint_pos[i]
+                          , targetVelocity = 5
+                          )
+
+
+for _ in range(100):
+  p.stepSimulation()
+  time.sleep(1./10.)
+  
+joint_info = p.getJointInfo(robot, camera_joint)[14]
+print(joint_info)
+
+
+# print("asdjnaskdjnasdkjnasdkjnasdjnasdkjnasdkjnasdkjnasdkjnasdkjnaskdn", numJoints)
+# while True:
+#   try:
+#     a=1
+#   except KeyboardInterrupt:
+#     break
+# if (numJoints != 6):
 #   exit()
 
-# #lower limits for null space
-# ll = [-.967, -2, -2.96, 0.19, -2.96]
-# #upper limits for null space
-# ul = [.967, 2, 2.96, 2.29, 2.96]
-# #joint ranges for null space
-# jr = [5.8, 4, 5.8, 4, 5.8]
-# #restposes for null space
+# end_dest = False
+# destination_coordinates = [0,2,0.3]
+
+
+# while not end_dest:
+
+#   p.stepSimulation()
+#   # Calculate the destination coordinates from an image
+  
+#   joint_info = p.getJointInfo(robot, camjoint)
+#   joint_axis, joint_parentFramePos, joint_parentFrameOrn  = joint_info[13], joint_info[14], joint_info[15]
+#   # destination_coordinates += joint_parentFrameOrn # Not sure which one of the three works correctly
+
+#   print(destination_coordinates)
+#   joint_pos = p.calculateInverseKinematics(robot,
+#                                             robotEndEffectorIndex, 
+#                                             destination_coordinates)
+#   for i in range(numJoints):
+#     p.setJointMotorControl2(bodyIndex = robot,
+#                             jointIndex = i,
+#                             controlMode = control_mode,
+#                             targetPosition = joint_pos[i]
+#                             # , targetVelocity = 1
+#                             )
+
+#   #Need end condition
+#   if KeyboardInterrupt:
+#     exit()
+
+
+
+# # #lower limits for null space
+# # ll = [-.967, -2, -2.96, 0.19, -2.96]
+# # #upper limits for null space
+# # ul = [.967, 2, 2.96, 2.29, 2.96]
+# # #joint ranges for null space
+# # jr = [5.8, 4, 5.8, 4, 5.8]
+# # #restposes for null space
 # rp = [0, 0, 0, 0.5 * math.pi, 0]
-# #joint damping coefficents
-# jd = [0.1, 0.1, 0.1, 0.1, 0.1]
+# # #joint damping coefficents
+# # jd = [0.1, 0.1, 0.1, 0.1, 0.1]
 
 # for i in range(numJoints):
 #   p.resetJointState(kukaId, i, rp[i])
@@ -80,23 +156,23 @@ while True:
 
 #     if (useNullSpace == 1):
 #       if (useOrientation == 1):
-#         jointPoses = p.calculateInverseKinematics(kukaId, kukaEndEffectorIndex, pos, orn, ll, ul,
-#                                                   jr, rp)
+        # jointPoses = p.calculateInverseKinematics(kukaId, kukaEndEffectorIndex, pos)#, orn, ll, ul,
+#                                                   # jr, rp)
 #       else:
 #         jointPoses = p.calculateInverseKinematics(kukaId,
 #                                                   kukaEndEffectorIndex,
-#                                                   pos,
-#                                                   lowerLimits=ll,
-#                                                   upperLimits=ul,
-#                                                   jointRanges=jr,
-#                                                   restPoses=rp)
+#                                                   pos)
+#                                                   # lowerLimits=ll,
+#                                                   # upperLimits=ul,
+#                                                   # jointRanges=jr,
+#                                                   # restPoses=rp)
 #     else:
 #       if (useOrientation == 1):
 #         jointPoses = p.calculateInverseKinematics(kukaId,
 #                                                   kukaEndEffectorIndex,
 #                                                   pos,
 #                                                   orn,
-#                                                   jointDamping=jd,
+#                                                   # jointDamping=jd,
 #                                                   solver=ikSolver,
 #                                                   maxNumIterations=100,
 #                                                   residualThreshold=.01)
