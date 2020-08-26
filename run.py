@@ -62,6 +62,9 @@ try:
 
 				break
 				print("TARGET REACHED")
+				print("GRABBING BOTTLE")
+
+				motors.grab()
 
 
 		key = cv2.waitKey(1) & 0xFF

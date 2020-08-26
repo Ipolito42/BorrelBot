@@ -132,7 +132,7 @@ z_4 = 0 + z_3
 # Take the motors to default position
 
 servo = maestro.Controller('COM8') # Setup connection with the correct USB port
-# servo.setTarget(0,6000)
-for i in range(6):
-    # servo.setSpeed(i, 20)
-    servo.setTarget(i, 6000)
+servo.setTarget(4,7700)
+# for i in range(6):
+#     # servo.setSpeed(i, 20)
+#     servo.setTarget(i, 6000)

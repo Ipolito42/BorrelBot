@@ -36,9 +36,21 @@ class inverse_kinematics():
     p.setGravity(0, 0, -9.81)
     self.camera_joint = 3
 
-    self.joint_pos_angle = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi, 0]
+    #lower limits for null space
+    self.ll = [-.967, -2, -2.96, 0.19, -2.96]
+    #upper limits for null space
+    self.ul = [.967, 2, 2.96, 2.29, 2.96]
+    #joint ranges for null space
+    self.jr = [5.8, 4, 5.8, 4, 5.8]
+    #restposes for null space
+    self.rp = [0, 0, 0, 0.5 * math.pi, 0]
+    #joint damping coefficents
+    self.jd = [0.1, 0.1, 0.1, 0.1, 0.1]
+
+
+    self.rp = [0, 0, 0, 0.5 * math.pi, 0.5 * math.pi, 0.5 * math.pi, 0]
     for i in range(self.numJoints):
-      p.resetJointState(self.robot, i, self.joint_pos_angle[i])
+      p.resetJointState(self.robot, i, self.rp[i])
 
 
 
@@ -49,16 +61,15 @@ class inverse_kinematics():
 
     camera_position = np.array(p.getJointInfo(self.robot, self.camera_joint)[14])
     self.destination_coordinates = destination_coordinates
-
     # Correct for the camera location
     self.destination_coordinates += camera_position
     # Correct to grab the bottle 3cm below the cap
     self.destination_coordinates -= np.array([0, 0, 0.03])
+
     self.joint_pos_angle = p.calculateInverseKinematics(self.robot,
                                               self.robotEndEffectorIndex, 
                                               self.destination_coordinates)
-
-    print(self.joint_pos_angle)                                  
+                             
     for i in range(self.numJoints):
       p.setJointMotorControl2(bodyIndex = self.robot,
                               jointIndex = i,

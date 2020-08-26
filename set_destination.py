@@ -30,13 +30,23 @@ import numpy as np
 # 	middle = 6000 steps
 # 	end = 8000 steps
 
-# servo wrist
+# servo wrist x-axis
 # 	1 step is 0.03215 deg = 0.00056099868 rad
 # 	90 deg = 2800 steps
 
 # 	beginning = 2000 steps
 # 	middle = 5250 steps
 # 	end = 8500 steps
+
+# servo wrist y-axis
+# 	beginning = 4000 steps
+# 	end = 7700 steps
+
+
+# 	servo grappler
+# 	open = 5500
+# 	middle 4750
+# 	closed = 4000
 
 
 global rad_per_step_list
@@ -49,7 +59,7 @@ class set_destination():
 		global servo_steps_list
 
 		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561]
-		servo_steps_list = [[3968, 5998, 8000], [3000, 6646, 9984], [4000, 5775, 8000], [2000, 6016, 8500]] # [min, middle, max]
+		servo_steps_list = [[4000, 6000, 8000], [3000, 6000, 9900], [4000, 6000, 8000], [2000, 6000, 8500], [4000, 6000, 7700]] # [min, middle, max]
 
 		self.agent = agent
 		self.speed = speed
@@ -98,19 +108,26 @@ class set_destination():
 		self.agent.setTarget(1, servo_steps_list[1][2])
 		self.agent.setTarget(2, servo_steps_list[2][2])
 		self.agent.setTarget(3, servo_steps_list[3][2])
+		self.agent.setTarget(3, servo_steps_list[4][2])
+	
+
+	def grab(self,):
+		self.agent.setTarget(5, 4000)
+
+
 
 
 
 	def main(self, pos_angles):
 		steps = []
 		self.pos_angles = pos_angles
-		# for i in range(4):
+		# for i in range(5):
 		# 	steps.append(self.get_steps_from_position(i))
 		# 	print(steps, i)
 
 		if self.agent!=None:
 
-			for i in range(4):
+			for i in range(5):
 				self.set_speed_acceleration(i)
 				self.agent.setTarget(i, self.get_steps_from_position(i))
 
