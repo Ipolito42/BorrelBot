@@ -70,7 +70,7 @@ try:
 
 	while True:
 		# Calculate the destination coordinates from an image
-		destination_coordinates = camera.main(show_camera=False)
+		destination_coordinates = camera.main(show_camera=True)
 
 		if destination_coordinates != None:
 			destination_coordinates_previous = destination_coordinates

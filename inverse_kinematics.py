@@ -12,7 +12,7 @@ if (clid < 0):
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
 p.loadURDF("plane.urdf", [0, 0, -0.3])
-kukaId = p.loadURDF("test_urdf.urdf", [0, 0, 0])
+kukaId = p.loadURDF("urdf_straight.urdf", [0, 0, 0])
 p.resetBasePositionAndOrientation(kukaId, [0, 0, 0], [0, 0, 0, 1])
 kukaEndEffectorIndex = 6
 numJoints = p.getNumJoints(kukaId)
