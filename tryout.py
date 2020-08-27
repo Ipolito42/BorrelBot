@@ -151,5 +151,37 @@ for i in range(len(rad_per_step_list)):
 
     print(a)
 
-# print(4000 * 0.000561)
-    
+
+
+# from set_destination import set_destination
+
+
+# servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
+# motors = set_destination(servo_agent)
+# motors.set_to_parked_position()
+# # motors.grab()
+
+
+import cv2
+from camera_code import camera_code
+
+
+import cv2
+
+cap = cv2.VideoCapture(1)
+
+while(True):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+
+    # Our operations on the frame come here
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Display the resulting frame
+    cv2.imshow('frame',frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# When everything done, release the capture
+cap.release()
+cv2.destroyAllWindows()

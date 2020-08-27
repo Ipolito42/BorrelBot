@@ -104,11 +104,12 @@ class set_destination():
 		'''
 			Returns all the servos to the parked position before switching off
 		'''
-		self.agent.setTarget(0, servo_steps_list[0][2])
-		self.agent.setTarget(1, servo_steps_list[1][2])
-		self.agent.setTarget(2, servo_steps_list[2][2])
-		self.agent.setTarget(3, servo_steps_list[3][2])
-		self.agent.setTarget(3, servo_steps_list[4][2])
+		self.agent.setTarget(0, servo_steps_list[0][1])
+		self.agent.setTarget(1, servo_steps_list[1][1])
+		self.agent.setTarget(2, servo_steps_list[2][1])
+		self.agent.setTarget(3, servo_steps_list[3][1])
+		self.agent.setTarget(4, servo_steps_list[4][1])
+
 	
 
 	def grab(self,):

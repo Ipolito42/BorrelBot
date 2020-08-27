@@ -54,12 +54,13 @@ try:
 				time.sleep(2)
 
 				# Print the destination coordinates
-				print("x={:.1f}, y={:.1f} z={:.1f}".format(destination_coordinates[0]/100, destination_coordinates[1]/100, destination_coordinates[2]/100))
+				print("x={:.3f}, y={:.3f} z={:.3f}".format(destination_coordinates[0]/100, destination_coordinates[1]/100, destination_coordinates[2]/100))
 
 				break
 				print("TARGET REACHED")
 				print("GRABBING BOTTLE")
 
+				# Function to grab the bottle
 				motors.grab()
 
 

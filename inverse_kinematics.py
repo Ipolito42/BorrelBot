@@ -100,11 +100,38 @@ class inverse_kinematics():
     return self.joint_pos_angle
 
 
-# For trial
-ik = inverse_kinematics()
-pos = ik.get_motor_position_angles([-1,2,1])
+# # For trial
+# ik = inverse_kinematics()
+# pos = ik.get_motor_position_angles([-1,2,1])
 
 
+
+
+
+
+
+
+
+
+clid = p.connect(p.GUI)
+    
+    # if (clid < 0):
+    #   p.connect(p.GUI)
+    #   #p.connect(p.SHARED_MEMORY_GUI)
+
+# p.setAdditionalSearchPath(pybullet_data.getDataPath())
+
+# p.resetSimulation()
+# p.loadURDF("plane.urdf", [0, 0, -0.3])
+
+robot = p.loadURDF("bb_test.urdf", [0, 0, 0], useFixedBase=1)
+quitting = True
+while True:
+  if KeyboardInterrupt:
+    quitting=False
+    exit()
+  else:
+    continue
 
 
 
