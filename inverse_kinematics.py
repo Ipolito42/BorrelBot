@@ -125,13 +125,11 @@ clid = p.connect(p.GUI)
 # p.loadURDF("plane.urdf", [0, 0, -0.3])
 
 robot = p.loadURDF("bb_test.urdf", [0, 0, 0], useFixedBase=1)
-quitting = True
 while True:
-  if KeyboardInterrupt:
-    quitting=False
-    exit()
-  else:
-    continue
+  try:
+    a=1
+  except KeyboardInterrupt:
+    break
 
 
 

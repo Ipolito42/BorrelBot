@@ -33,6 +33,7 @@ try:
 	camera = camera_code()
 	motors = set_destination(servo_agent)
 	ik = inverse_kinematics()
+	motors.set_to_parked_position()
 
 	# Wait a sec to properly initialize everything
 	time.sleep(1)
