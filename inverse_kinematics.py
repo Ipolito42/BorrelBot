@@ -8,7 +8,10 @@ from datetime import datetime
 import pybullet_data
 import numpy as np
 
-
+# ================================================================================================================================
+# |================================ This class builds a pybullet simulation and performs ==========================================|
+# |========================================== inverse kinematics for BorrelBot ====================================================|
+# ================================================================================================================================
 
 
 class inverse_kinematics():
@@ -17,65 +20,60 @@ class inverse_kinematics():
     pass
 
   
-  def initialize_GUI(self):
+  def initialize_GUI(self,):
+    '''
+			Args:
+			Ιnitializes the GUI and places the robot in place
+		'''
+
+    # Start the GUI
     clid = p.connect(p.GUI)
-    
-    # if (clid < 0):
-    #   p.connect(p.GUI)
-    #   #p.connect(p.SHARED_MEMORY_GUI)
 
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
-
-    # p.resetSimulation()
+    # Load the floor and the robot
     p.loadURDF("plane.urdf", [0, 0, 0])
     self.robot = p.loadURDF("bb_test.urdf", [0, 0, 0], useFixedBase=1)
-    # p.resetBasePositionAndOrientation(self.robot, [0, 0, 0], [0, 0, 0, 1])
+    # Index of the endpoint for the invervse kinematics
     self.robotEndEffectorIndex = 5
     self.numJoints = p.getNumJoints(self.robot)
-    print(self.numJoints)
-
     p.setGravity(0, 0, -9.81)
-    self.camera_joint = 3
+    
 
-    #lower limits for null space
+    # Lower limits for null space
     self.ll = [-1.082, -1.179, -0.786, -2.244, -1.122, 0]
-    #upper limits for null space
+    # Upper limits for null space
     self.ul = [1.082, 1.5327, 0.786, 1.4025, 0.9537, 0]
-    #joint ranges for null space
+    # Joint ranges for null space
     self.jr = [2*1.082, 1.5327+1.179, 2*0.786, 1.4025+2.244, 0.9537+1.122, 0]
-    #restposes for null space
+    # Restposes for null space
     self.rp = [0, -0.657, 0.55*math.pi, 0, 0.3, 0]
-    #joint damping coefficents
+    # Joint damping coefficents
     self.jd = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
 
   
-    
+    # Set the joints to the parked position of the robot (see set_destination script)
     for i in range(self.numJoints):
       p.resetJointState(self.robot, i, self.rp[i])
     time.sleep(3)
 
   def get_motor_position_angles(self, destination_coordinates):
-    
-    self.initialize_GUI()
-    # Get the camera position
-    print(destination_coordinates)
-    
-
-    # camera_position = np.array(p.getJointInfo(self.robot, self.camera_joint)[14])
-    camera_position = [0, 1.4, 1.5]
+    '''
+			Args:
+        destination_coordinates: target coordinates as seen by the camera
+			This function takes the destination coordinates and returns the joint angles under the given constraints
+		'''
     self.destination_coordinates = destination_coordinates
-    print("dest coord", destination_coordinates)
+    self.initialize_GUI()
+    
+    # Change from camera's frame of reference to the robot's base frame of reference
+    # Get the camera position
+    camera_position = [0, 1.4, 1.5]
     # Correct for the camera location
     self.destination_coordinates += np.array(camera_position)
-    print(self.destination_coordinates)
-    print("cam", camera_position)
     # Correct to grab the bottle 3cm below the cap
-    # self.destination_coordinates += np.array([0, 0, -0.03])
-    # p.loadURDF("sphere2red.urdf", self.destination_coordinates, useFixedBase=1)
-    # print("cam pos", camera_position)
-    # print("dest coord", destination_coordinates)
+    self.destination_coordinates += np.array([0, 0, -0.3])
     
-
+    # Run the inverse kinematics with the proper constraints
     self.joint_pos_angle = p.calculateInverseKinematics(self.robot,
                                               self.robotEndEffectorIndex, 
                                               self.destination_coordinates,
@@ -86,17 +84,13 @@ class inverse_kinematics():
                                               )
                                               
                              
-    # for i in range(self.numJoints-1):
-    #   p.setJointMotorControl2(bodyIndex = self.robot,
-    #                           jointIndex = i,
-    #                           controlMode = p.POSITION_CONTROL,
-    #                           targetPosition = self.joint_pos_angle[i],
-    #                           targetVelocity = 5
-    #                           )
-
+    # Simulate the movement of the motors to the calculated endpoint
     p.setJointMotorControlArray(self.robot, range(self.numJoints), p.POSITION_CONTROL, self.joint_pos_angle)      
     print(self.joint_pos_angle)
 
+    # Give some time for the simulation to remain open for observation.
+    # If more time is required change the 900 ---> 9000.
+    # Remember to navigate in the GUI you need to press Ctrl + mouse buttons
     for _ in range(900):
       p.stepSimulation()
       time.sleep(1/200)
@@ -106,14 +100,29 @@ class inverse_kinematics():
 
     return self.joint_pos_angle
 
+# ================================================================================================================================
+# ================================================================================================================================
 
-# # For trial
-# from set_destination import set_destination as sd
+
+
+
+# ================================================================
+# |================== To test inverse kinematics =================|
+# ================================================================
+
+# cap_coordinates = [1.1, 0, 0]
 # ik = inverse_kinematics()
-# pos = ik.get_motor_position_angles([1.1, 0, 0])
-# kwstras = sd()
-# kwstras.main(pos)
+# pos = ik.get_motor_position_angles(cap_coordinates)
 
+# ================================================================
+# ================================================================
+
+
+
+
+# ================================================================
+# |========= To test the initial position of the robot ==========|
+# ================================================================
 # clid = p.connect(p.GUI)
 # p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
@@ -121,16 +130,14 @@ class inverse_kinematics():
 # robot = p.loadURDF("bb_test.urdf", [0, 0, 0], useFixedBase=1)
 # numJoints = p.getNumJoints(robot)
 # rp = [0, -0.657, 0.55*math.pi, 0, 0.3, 0]
-# #joint damping coefficents
-# jd = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
 
-  
-    
 # for i in range(numJoints):
 #   p.resetJointState(robot, i, rp[i])
-# time.sleep(3)
+
 # while True:
 #   try:
 #     a=1
 #   except KeyboardInterrupt:
 #     exit()
+# ================================================================
+# ================================================================

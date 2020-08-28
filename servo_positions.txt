@@ -1,37 +1,36 @@
-base spine
 
-Minimum Position = 3968
-Maximum Position = 8000
+# servo base servo
+# 1 step is 0.031034482 deg = 0.0005416538925509148 rad
+# 	beginning = 3968 steps
+# 	middle = 6000 steps
+# 	end = 8000 steps
 
+# servo base arm servo
+# 	1 step is 0.0025 deg = 0.0003926990816987241 rad
+# 	z axis = 8300 steps
+# 	90 deg = 4300 steps
 
-base arm
+# 	beginning = 3000 steps
+# 	middle = 6492 steps
+# 	end = 9984 steps
 
-Minimum Position = 3000
-Maximum Position = 9984
+# servo elbow servo
+# 	1 step is 0.0025 deg = 0.00039269908169872416 rad
+# 	z axis =  steps
+# 	90 deg = 4000 steps
 
-middle: 6300
-Z axis: 8300
-90 degrees: 4300
+# 	beginning = 4000 steps
+# 	middle = 6000 steps
+# 	end = 8000 steps
 
+# servo wrist x-axis
+# 	1 step is 0.03215 deg = 0.00056099868 rad
+# 	90 deg = 2800 steps
 
-Servo elbow
+# 	beginning = 2000 steps
+# 	middle = 5250 steps
+# 	end = 8500 steps
 
-1 step is 0.0025 deg = 0.0003926990816987241 rad
-z axis = 8300 steps
-90 deg = 4300 steps
-beginning = 2000 stepsmiddle = 5250 steps
-end = 8500 steps
-
-
-Servo Wrist
-
-min = 2000
-middle = 5250
-max = 8500
-
-
-
-Servo Grappler
-
-Minimum Position = 1000
-Maximum Position = 6000
+# servo wrist y-axis
+# 	beginning = 4000 steps
+# 	end = 7700 steps
