@@ -59,7 +59,7 @@ class set_destination():
 		global servo_steps_list
 
 		rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561, 0.000561]
-		servo_steps_list = [[4000, 6000, 8000], [3000, 6000, 9900], [4000, 6000, 8000], [2000, 6000, 8500], [4000, 6000, 7700]] # [min, middle, max]
+		servo_steps_list = [[4000, 6000, 8000], [3000, 6000, 9900], [4000, 6000, 8000], [2000, 6000, 8500], [4000, 5000, 7700]] # [min, middle, max]
 
 		self.agent = agent
 		self.speed = speed
@@ -84,7 +84,13 @@ class set_destination():
 			Returns the steps required for the servos to rotate to the appropriate angle calculated from the IK model
 		'''
 		servo_steps = servo_steps_list[servo_number]
-		steps = int(servo_steps[1] + (self.pos_angles[servo_number])/rad_per_step_list[servo_number])
+		# if servo_number==2:
+		# 	steps = int(servo_steps[1] - (self.pos_angles[servo_number])/rad_per_step_list[servo_number])
+		if servo_number==4:
+			steps = int(servo_steps[1] + (self.pos_angles[servo_number])/rad_per_step_list[servo_number])
+		else:
+			steps = int(servo_steps[1] - (self.pos_angles[servo_number])/rad_per_step_list[servo_number])
+		
 
 
 		if steps > servo_steps_list[servo_number][2]:
@@ -109,6 +115,7 @@ class set_destination():
 		self.agent.setTarget(2, servo_steps_list[2][1])
 		self.agent.setTarget(3, servo_steps_list[3][1])
 		self.agent.setTarget(4, servo_steps_list[4][1])
+		self.agent.setTarget(5, 5500)
 
 	
 
@@ -125,7 +132,9 @@ class set_destination():
 		# for i in range(5):
 		# 	steps.append(self.get_steps_from_position(i))
 		# 	print(steps, i)
-
+		for i in range(5):
+			print(self.get_steps_from_position(i))
+				
 		if self.agent!=None:
 
 			for i in range(5):

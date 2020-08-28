@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 global cap_width, camera_focal_length
 cap_width = 3 # cm
-camera_focal_length = 900 # pixels 1430 for the camera we have        900 is for my laptop
+camera_focal_length = 1430 # pixels 1430 for the camera we have        900 is for my laptop
 
 
 
@@ -25,7 +25,7 @@ class camera_code():
 		self.cam.set(3,1280) # Width
 		self.cam.set(4,1024) # Height
 		# self.cam.set(5, 25) # Frame rate
-		self.cam.set(15, -3) # Exposure time 2^(-5)
+		# self.cam.set(15, -2) # Exposure time 2^(-5)
 
 		
 
@@ -140,7 +140,7 @@ class camera_code():
 			cv2.imshow("input", self.img_fit_ellipse)
 
 		if self.ellipse != None:
-			return [self.x_coordinate, self.y_coordinate, self.z_coordinate]
+			return [self.z_coordinate, self.x_coordinate, -self.y_coordinate]
 
 
 

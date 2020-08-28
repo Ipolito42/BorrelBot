@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 # ---------------------joint origins-------------------------
 # -----------------------------------------------------------
 theta = np.arccos(9.2/12)
+# print(np.arccos(9.5/12))
 '''
 x = (0, 0.014, 0.106, 0.684, 0.702, 0.782)
 z = (0.056, 0.092, 0.17, 0.100, 0.079, 0.079)
@@ -43,9 +44,10 @@ z_3 = -0.028*np.cos(theta) + z_2
 x_4 = 0.08 + x_3
 z_4 = 0 + z_3
 
-# x = ["%.4f" % item for item in [x_0_0, x_0, x_1, x_2, x_3, x_4]]
-# y = ["%.4f" % item for item in np.zeros(len(x))]
-# z = ["%.4f" % item for item in [z_0_0, z_0, z_1, z_2, z_3, z_4]]
+x = ["%.4f" % item for item in [x_0_0*10, x_0*10, x_1*10, x_2*10, x_3*10, x_4*10]]
+y = ["%.4f" % item for item in np.zeros(len(x))]
+z = ["%.4f" % item for item in [z_0_0*10, z_0*10, z_1*10, z_2*10, z_3*10, z_4*10]]
+
 # # -----------------------------------------------------------
 # # ---------------------link origins-------------------------
 # # -----------------------------------------------------------
@@ -137,51 +139,51 @@ z_4 = 0 + z_3
 #     # servo.setSpeed(i, 20)
 #     servo.setTarget(i, 6000)
 
-rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561, 0.000561]
+# rad_per_step_list = [0.000541, 0.000393, 0.000393, 0.000561, 0.000561]
 
-servo_steps_list = [[4000, 6000, 8000], [3000, 6000, 9900], [4000, 6000, 8000], [2000, 6000, 8500], [4000, 6000, 7700]] # [min, middle, max]
-minimums = []
-maximums = []
-for i in range(len(rad_per_step_list)):
-    a = -(servo_steps_list[i][1] - servo_steps_list[i][0]) * rad_per_step_list[i]
-    b = (servo_steps_list[i][2] - servo_steps_list[i][1]) * rad_per_step_list[i]
+# servo_steps_list = [[4000, 6000, 8000], [3000, 6000, 9900], [4000, 6000, 8000], [2000, 6000, 8500], [4000, 6000, 7700]] # [min, middle, max]
+# minimums = []
+# maximums = []
+# for i in range(len(rad_per_step_list)):
+#     a = -(servo_steps_list[i][1] - servo_steps_list[i][0]) * rad_per_step_list[i]
+#     b = (servo_steps_list[i][2] - servo_steps_list[i][1]) * rad_per_step_list[i]
     
-    minimums.append(a)
-    maximums.append(b)
+#     minimums.append(a)
+#     maximums.append(b)
 
-    print(a)
-
-
-
-# from set_destination import set_destination
+#     print(a)
 
 
-# servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
-# motors = set_destination(servo_agent)
+
+from set_destination import set_destination
+
+
+servo_agent = maestro.Controller('COM8') # Setup connection with the correct USB port
+motors = set_destination(servo_agent)
 # motors.set_to_parked_position()
-# # motors.grab()
+motors.grab()
 
 
-import cv2
-from camera_code import camera_code
+# import cv2
+# from camera_code import camera_code
 
 
-import cv2
+# import cv2
 
-cap = cv2.VideoCapture(1)
+# cap = cv2.VideoCapture(1)
 
-while(True):
-    # Capture frame-by-frame
-    ret, frame = cap.read()
+# while(True):
+#     # Capture frame-by-frame
+#     ret, frame = cap.read()
 
-    # Our operations on the frame come here
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#     # Our operations on the frame come here
+#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Display the resulting frame
-    cv2.imshow('frame',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+#     # Display the resulting frame
+#     cv2.imshow('frame',frame)
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
 
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+# # When everything done, release the capture
+# cap.release()
+# cv2.destroyAllWindows()

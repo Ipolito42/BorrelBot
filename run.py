@@ -5,7 +5,6 @@ import maestro
 import cv2
 import time
 import numpy as np
-# import tinyik
 
 from set_destination import set_destination
 from camera_code import camera_code
@@ -41,13 +40,14 @@ try:
 	while True:
 		# Calculate the destination coordinates from an image
 		destination_coordinates = camera.main(show_camera=True)
+		print("asdadasdada sda sd", destination_coordinates)
 
 		if destination_coordinates != None:
-			if destination_coordinates[0] < 15 and destination_coordinates[1] < 15 and destination_coordinates[2] < 15:
+			if np.abs(destination_coordinates[0]) < 15 and np.abs(destination_coordinates[1]) < 15 and np.abs(destination_coordinates[2]) < 15:
 				print("TARGET LOCKED")
 			
 				# inverse_kinematics is the pybullet class which calculates the position angle for each motor given the destination coordinates
-				pos_angles = ik.get_motor_position_angles(np.array(destination_coordinates)/100)
+				pos_angles = ik.get_motor_position_angles(np.array(destination_coordinates)/10)
 				# Move motors such that the endpoint reaches to the destination coordinates
 				motors.main(pos_angles)
 
@@ -55,14 +55,15 @@ try:
 				time.sleep(2)
 
 				# Print the destination coordinates
-				print("x={:.3f}, y={:.3f} z={:.3f}".format(destination_coordinates[0]/100, destination_coordinates[1]/100, destination_coordinates[2]/100))
+				print("x={:.3f}, y={:.3f} z={:.3f}".format(destination_coordinates[0]/10, destination_coordinates[1]/10, destination_coordinates[2]/10))
 
-				break
+				
 				print("TARGET REACHED")
 				print("GRABBING BOTTLE")
 
 				# Function to grab the bottle
 				motors.grab()
+				break
 
 
 		key = cv2.waitKey(1) & 0xFF
@@ -77,5 +78,5 @@ except KeyboardInterrupt:
 	print("User Shutdown")
 
 
-
-# motors.set_to_parked_position()
+time.sleep(5)
+motors.set_to_parked_position()
